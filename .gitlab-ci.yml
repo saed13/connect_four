@@ -20,5 +20,7 @@ before_script:
 run:
   script:
     - python3 user-interface/GameBoard.py --arg myArg < inputs.txt
+    - gameBoard = GameBoard()
+    - gameBoard.startGame()
   artifacts:
     when: always
