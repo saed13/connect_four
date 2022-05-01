@@ -44,24 +44,30 @@ class GameBoard:
 
         :return:
         """
-        self.p = 1 if self.p1 else 2
-        column = input(f"Player {self.p}, enter your move[1-7]:")
-        column = int(self.check(column))
+        try:
+            self.p = 1 if self.p1 else 2
+            column = input(f"Player {self.p}, enter your move[1-7]:")
+            column = int(self.check(column))
 
-        result = self.addToken(column)
-        return result
+            result = self.addToken(column)
+            return result
+        except EOFError as e:
+            print(end="")
 
     def check(self, column):
-        while True:
-            if column in ["1", "2", "3", "4", "5", "6", "7"]:
-                if " " not in self.board[int(column) - 1]:
-                    column = input(f"Column is full! Player {self.p}, enter your move[1-7]:")
-                    column = self.check(column)
-                break
+        try:
+            while True:
+                if column in ["1", "2", "3", "4", "5", "6", "7"]:
+                    if " " not in self.board[int(column) - 1]:
+                        column = input(f"Column is full! Player {self.p}, enter your move[1-7]:")
+                        column = self.check(column)
+                    break
 
-            column = input(f"Wrong input! Player {self.p}, enter your move[1-7]:")
+                column = input(f"Wrong input! Player {self.p}, enter your move[1-7]:")
 
-        return column
+            return column
+        except EOFError as e:
+            print(end="")
 
     def addToken(self, column):
         """
