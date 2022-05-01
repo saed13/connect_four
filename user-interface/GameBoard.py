@@ -17,7 +17,7 @@ class GameBoard:
             for i in range(0, 7):
                 e.append(" ")
 
-    def __str__(self):
+    def str(self):
         transposed = transpose(self.board)
 
         currentBoard = ""
@@ -90,7 +90,7 @@ class GameBoard:
                 break
 
         self.board = currentBoard
-        return str(self.board)
+        return self.str
 
 
 def transpose(matrix):
