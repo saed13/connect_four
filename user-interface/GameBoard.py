@@ -122,6 +122,6 @@ def clear():
         _ = system('clear')
 
 
-#gameBoard = GameBoard()
+gameBoard = GameBoard()
 
-#gameBoard.startGame()
+gameBoard.startGame()
