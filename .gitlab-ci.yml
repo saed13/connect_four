@@ -17,6 +17,11 @@ before_script:
   - virtualenv venv
   - source venv/bin/activate
 
+job:
+  stage: build
+  script: make build
+  dependencies: []
+
 run:
   script:
     - python3 user-interface/GameBoard.py --arg myArg < inputs.txt
