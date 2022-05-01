@@ -14,7 +14,7 @@ cache:
 
 before_script:
   - sed settings.ini.template > settings.ini.
-  - python3 --version  # For debugging
+  - python --version  # For debugging
   - pip install -r requirements.txt
   - virtualenv venv
   - source venv/bin/activate
