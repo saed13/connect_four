@@ -16,10 +16,10 @@ speed = [2, 2]
 
 screen = pygame.display.set_mode(size)
 
-board = pygame.image.load("../resources/board.png")
-p1_chip = pygame.image.load("../resources/chip_1.png")
+board = pygame.image.load("./resources/board.png")
+p1_chip = pygame.image.load("./resources/chip_1.png")
 p1_chip = pygame.transform.scale(p1_chip, (80, 80))
-p2_chip = pygame.image.load("../resources/chip_2.png")
+p2_chip = pygame.image.load("./resources/chip_2.png")
 p2_chip = pygame.transform.scale(p2_chip, (80, 80))
 boardrect = board.get_rect()
 
