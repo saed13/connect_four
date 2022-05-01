@@ -8,14 +8,14 @@ class TestConnect4(unittest.TestCase):
 
     def runTest(self, given_answer, expected_out):
         with patch('builtins.input', return_value=given_answer), patch('sys.stdout', new=StringIO()) as fake_out:
-            answer()
             self.assertEqual(fake_out.getvalue().strip(), expected_out)
 
     def test_startGame(self):
         pass
 
     def test_askInput(self):
-        self.assertAlmostEqual(GameBoard.askInput())
+        # self.assertAlmostEqual(GameBoard.askInput())
+        pass
 
     def test_check(self):
         self.assertEqual(GameBoard.check(GameBoard, 2), "2")
@@ -33,6 +33,16 @@ class TestConnect4(unittest.TestCase):
         self.assertEqual(gameBoard2.addToken(3), test_board2)
 
     def test_transpose(self):
+        result = """  |   |   |   |   |   |   | 
+  |   |   |   |   |   |   | 
+  |   |   |   |   |   |   | 
+  |   |   |   |   |   |   | 
+  |   |   |   |   |   |   | 
+  |   |   |   |   |   |   | 
+  | X |   |   |   |   |   | 
+"""
+        matrix = """[[' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', 'X'], [' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ']"""
+        self.assertEqual(transpose(matrix), result)
         pass
 
     def test_toString(self):
