@@ -47,6 +47,8 @@ class GameBoard:
         try:
             self.p = 1 if self.p1 else 2
             column = input(f"Player {self.p}, enter your move[1-7]:")
+            if column == "stop":
+                exit()
             column = int(self.check(column))
 
             result = self.addToken(column)
