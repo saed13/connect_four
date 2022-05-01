@@ -13,6 +13,7 @@ cache:
 
 
 before_script:
+  - apt-get install python3
   - sed settings.ini.template > settings.ini.
   - python --version  # For debugging
   - pip install -r requirements.txt
