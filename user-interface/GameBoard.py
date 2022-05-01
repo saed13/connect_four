@@ -1,3 +1,7 @@
+from os import system, name
+from time import sleep
+
+
 class GameBoard:
     board = []
     p1 = True
@@ -10,11 +14,11 @@ class GameBoard:
         self.board = [[], [], [], [], [], [], []]
 
         for e in self.board:
-            for i in range(0, 8):
+            for i in range(0, 7):
                 e.append(" ")
 
-    def __str__(self):
-        transposed = self.transpose(self.board)
+    def str(self):
+        transposed = transpose(self.board)
 
         currentBoard = ""
         for e in transposed:
@@ -30,20 +34,43 @@ class GameBoard:
         :return:
         """
         while True:
-            x = self.askInput
+            x = self.askInput()
+            sleep(0.3)
+            clear()
             print(x)
 
-    @property
     def askInput(self):
         """
 
         :return:
         """
-        self.p = 1 if self.p1 else 2
-        column = input(f"Player {self.p}, enter your move[1-7]:")
+        try:
+            self.p = 1 if self.p1 else 2
+            column = input(f"Player {self.p}, enter your move[1-7]:")
+            print(column)
+            if column == "stop":
+                exit()
+            column = int(self.check(column))
 
-        result = self.addToken(int(column))
-        return result
+            result = self.addToken(column)
+            return result
+        except EOFError as e:
+            print(end="")
+
+    def check(self, column):
+        try:
+            while True:
+                if column in ["1", "2", "3", "4", "5", "6", "7"]:
+                    if " " not in self.board[int(column) - 1]:
+                        column = input(f"Column is full! Player {self.p}, enter your move[1-7]:")
+                        column = self.check(column)
+                    break
+
+                column = input(f"Wrong input! Player {self.p}, enter your move[1-7]:")
+
+            return column
+        except EOFError as e:
+            print(end="")
 
     def addToken(self, column):
         """
@@ -54,7 +81,7 @@ class GameBoard:
         currentBoard = self.board
         column = column - 1
 
-        for i in range(7, -1, -1):
+        for i in range(6, -1, -1):
             if currentBoard[column][i] == " ":
                 currentBoard[column][i] = self.p1symbol if self.p1 else self.p2symbol
 
@@ -63,30 +90,38 @@ class GameBoard:
                 break
 
         self.board = currentBoard
-        return str(gameBoard)
+        return self.str()
 
-    def transpose(self, matrix):
-        """
 
-        :param matrix:
-        :return:
-        """
-        rows = len(matrix)
-        columns = len(matrix[0])
+def transpose(matrix):
+    """
 
-        matrix_t = []
-        for j in range(columns):
-            row = []
-            for i in range(rows):
-                row.append(matrix[i][j])
-            matrix_t.append(row)
+    :param matrix:
+    :return:
+    """
+    rows = len(matrix)
+    columns = len(matrix[0])
 
-        return matrix_t
+    matrix_t = []
+    for j in range(columns):
+        row = []
+        for i in range(rows):
+            row.append(matrix[i][j])
+        matrix_t.append(row)
+
+    return matrix_t
+
+
+def clear():
+    # for windows
+    if name == 'nt':
+        _ = system('cls')
+
+    # for mac and linux
+    else:
+        _ = system('clear')
 
 
 gameBoard = GameBoard()
 
 gameBoard.startGame()
-
-
-
