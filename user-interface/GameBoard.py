@@ -123,8 +123,3 @@ def clear():
     # for mac and linux
     else:
         _ = system('clear')
-
-
-#gameBoard = GameBoard()
-
-#gameBoard.startGame()
