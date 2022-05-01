@@ -1,3 +1,7 @@
+#hide_output
+#hide_input
+#tst_local_only
+
 from os import system, name
 
 import pygame
