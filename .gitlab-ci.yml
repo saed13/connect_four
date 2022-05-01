@@ -19,4 +19,4 @@ before_script:
 
 run:
   script:
-    - python3 user-interface/GameBoard.py --arg myArg <
+    - python3 user-interface/GameBoard.py --arg myArg < inputs.txt
