@@ -33,15 +33,9 @@ class TestConnect4(unittest.TestCase):
         self.assertEqual(gameBoard2.addToken(3), test_board2)
 
     def test_transpose(self):
-        result = """  |   |   |   |   |   |   | 
-  |   |   |   |   |   |   | 
-  |   |   |   |   |   |   | 
-  |   |   |   |   |   |   | 
-  |   |   |   |   |   |   | 
-  |   |   |   |   |   |   | 
-  | X |   |   |   |   |   | 
-"""
-        matrix = """[[' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', 'X'], [' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ']"""
+        result = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+
+        matrix = [[1, 4, 7], [2, 5, 8], [3, 6, 9]]
         self.assertEqual(transpose(matrix), result)
         pass
 
