@@ -22,6 +22,3 @@ run:
     - python3 user-interface/GameBoard.py --arg myArg < inputs.txt
   artifacts:
     when: always
-    reports:
-      junit: report.xml
-      cobertura: coverage.xml
