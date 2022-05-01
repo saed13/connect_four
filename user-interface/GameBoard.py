@@ -90,7 +90,7 @@ class GameBoard:
                 break
 
         self.board = currentBoard
-        return self.str
+        return self.str()
 
 
 def transpose(matrix):
