@@ -6,6 +6,11 @@ image: "python:3.8.9"
 variables:
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
 
+env:
+  global:
+    # SDL headless video device
+    - SDL_VIDEODRIVER=x11
+
 cache:
   paths:
     - .cache/pip
