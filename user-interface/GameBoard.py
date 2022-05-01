@@ -1,6 +1,20 @@
 from os import system, name
-from time import sleep
 
+import pygame
+
+pygame.init()
+
+size = width, height = 722, 622
+speed = [2, 2]
+
+screen = pygame.display.set_mode(size)
+
+board = pygame.image.load("../resources/board.png")
+p1_chip = pygame.image.load("../resources/chip_1.png")
+p1_chip = pygame.transform.scale(p1_chip, (80, 80))
+p2_chip = pygame.image.load("../resources/chip_2.png")
+p2_chip = pygame.transform.scale(p2_chip, (80, 80))
+boardrect = board.get_rect()
 
 class GameBoard:
     board = []
@@ -11,14 +25,24 @@ class GameBoard:
 
     def __init__(self):
         self.p = None
-        self.board = [[], [], [], [], [], [], []]
+        self.board = self.defineBoard([[], [], [], [], [], [], []])
+        self.chipPlace = self.defineChipPlace([[], [], [], [], [], [], []])
 
-        for e in self.board:
-            for i in range(0, 7):
-                e.append(" ")
 
     def __str__(self):
         return self.toStr()
+
+    def defineBoard(self, array):
+        for e in array:
+            for i in range(0, 6):
+                e.append(" ")
+        return array
+
+    def defineChipPlace(self, array):
+        for i in range(0, len(array)):
+            for e in range(0, 6):
+                array[i].append((16 + 100 * i, 518 - 100 * e))
+        return array
 
     def toStr(self):
         transposed = transpose(self.board)
@@ -37,62 +61,77 @@ class GameBoard:
         :return:
         """
         while True:
-            x = self.askInput()
-            sleep(0.3)
-            clear()
-            print(x)
+            ev = pygame.event.get()
+            # proceed events
+            for event in ev:
 
-    def askInput(self):
+                # handle MOUSEBUTTONUP
+                if event.type == pygame.MOUSEBUTTONUP:
+                    pos = pygame.mouse.get_pos()
+
+                    col = self.askInput(pos)
+                    if col == -1:
+                        break
+
+                    self.addToken(col)
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT: exit()
+
+            screen.blit(board, boardrect)
+            pygame.display.flip()
+
+    def askInput(self, pos):
         """
 
         :return:
         """
         try:
             self.p = 1 if self.p1 else 2
-            column = input(f"Player {self.p}, enter your move[1-7]:")
-            if column == "stop":
+            if pos == "stop":
                 exit()
-            column = int(self.check(column))
 
-            result = self.addToken(column)
-            return result
+            column = int(pos[0] / 100 - 0.05)
+            column = int(self.check(column))
+            if column == -1:
+                return -1
+
+            return column
         except EOFError as e:
             exit()
 
     def check(self, column):
         try:
             while True:
-                if column in ["1", "2", "3", "4", "5", "6", "7"]:
-                    if " " not in self.board[int(column) - 1]:
-                        column = input(f"Column is full! Player {self.p}, enter your move[1-7]:")
-                        column = self.check(column)
-                    break
+                if column in range(0, 7):
+                    if " " not in self.board[int(column)]:
+                        return -1
+                    return column
+                else:
+                    return -1
 
-                column = input(f"Wrong input! Player {self.p}, enter your move[1-7]:")
-
-            return column
         except EOFError as e:
             exit()
 
-    def addToken(self, column):
+    def addToken(self, col):
         """
 
         :param column:
         :return:
         """
-        currentBoard = self.board
-        column = column - 1
+        row = self.board[col].index(' ')
 
-        for i in range(6, -1, -1):
-            if currentBoard[column][i] == " ":
-                currentBoard[column][i] = self.p1symbol if self.p1 else self.p2symbol
+        screen.blit(p2_chip, self.chipPlace[col][row]) if self.p1 else screen.blit(p1_chip, self.chipPlace[col][row])
+        if self.p1:
+            self.board[col][row] = "p1"
+        else:
+            self.board[col][row] = "p2"
 
-                self.p1 = not self.p1
-                self.p2 = not self.p2
-                break
+        self.p1 = not self.p1
+        self.p2 = not self.p2
+        return
 
-        self.board = currentBoard
-        return self.toStr()
+
 
 
 def transpose(matrix):
