@@ -6,6 +6,9 @@ from os import system, name
 
 import pygame
 
+import os
+os.environ["SDL_VIDEODRIVER"] = "dummy"
+
 pygame.init()
 
 size = width, height = 722, 622
