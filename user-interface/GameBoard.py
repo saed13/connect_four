@@ -17,7 +17,10 @@ class GameBoard:
             for i in range(0, 7):
                 e.append(" ")
 
-    def str(self):
+    def __str__(self):
+        return self.toStr()
+
+    def toStr(self):
         transposed = transpose(self.board)
 
         currentBoard = ""
@@ -55,7 +58,7 @@ class GameBoard:
             result = self.addToken(column)
             return result
         except EOFError as e:
-            print(end="")
+            exit()
 
     def check(self, column):
         try:
@@ -70,7 +73,7 @@ class GameBoard:
 
             return column
         except EOFError as e:
-            print(end="")
+            exit()
 
     def addToken(self, column):
         """
@@ -90,7 +93,7 @@ class GameBoard:
                 break
 
         self.board = currentBoard
-        return self.str()
+        return self.toStr()
 
 
 def transpose(matrix):
