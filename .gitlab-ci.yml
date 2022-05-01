@@ -18,11 +18,10 @@ before_script:
   - virtualenv venv
   - source venv/bin/activate
   - pip install -r requirements.txt
-  - Xvfb :1 & export DISPLAY=:1
 
 run:
   script:
-    - SDL_VIDEODRIVER=dummy SDL_AUDIODRIVER=dis
+    - SDL_VIDEODRIVER=dummy
     - python3 user-interface/RunGame.py --arg myArg < inputs.txt
   artifacts:
     when: always
