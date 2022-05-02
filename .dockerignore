@@ -1,0 +1,6 @@
+*
+*/venv
+!test
+!user_interface
+!resources
+!requirements.txt
