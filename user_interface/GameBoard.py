@@ -170,28 +170,13 @@ class GameBoard:
 
         :return:
         """
+
         horizontal = self.checkShape(transpose(self.board))
-        if horizontal is not None:
-            self.winner = horizontal
-            print("horizontal ", horizontal)
-            return True
-
         vertical = self.checkShape(self.board)
-        if vertical is not None:
-            self.winner = vertical
-            print("vertical ", vertical)
-            return True
-
         diagonal = self.checkShape(diagonals(self.board))
-        if diagonal is not None:
-            self.winner = diagonal
-            print("diagonal ", diagonal)
-            return True
-
         antidiagonal = self.checkShape(antidiagonals(self.board))
-        if antidiagonal is not None:
-            self.winner = diagonal
-            print("antidiagonal ", antidiagonal)
+
+        if (antidiagonal or diagonal or vertical or horizontal) is not None:
             return True
 
         return False
@@ -227,6 +212,7 @@ class GameBoard:
             currentWinner = " "
 
         if fourConnected == 4:
+            self.winner = currentWinner
             return currentWinner
 
         return None
