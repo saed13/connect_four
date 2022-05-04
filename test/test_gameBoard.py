@@ -1,7 +1,7 @@
 import unittest
 from io import StringIO
 from unittest.mock import patch
-from GameBoard import *
+from user_interface.GameBoard import *
 
 
 class TestConnect4(unittest.TestCase):

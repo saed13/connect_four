@@ -1,0 +1,9 @@
+*
+*/venv
+!test
+!user_interface
+!templates
+!static
+!app.py
+!resources
+!requirements.txt

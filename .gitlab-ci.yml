@@ -1,5 +1,5 @@
 
-image: "python:3.8.9"
+image: python:3.8-slim
 
 # Change pip's cache directory to be inside the project directory since we can
 # only cache local items.
@@ -11,14 +11,17 @@ cache:
     - .cache/pip
     - venv/
 
+
 before_script:
+  - sed settings.ini.template > settings.ini.
   - python --version  # For debugging
-  - pip install -r requirements.txt
+  - pip install virtualenv
   - virtualenv venv
   - source venv/bin/activate
+  - pip install -r requirements.txt
 
 run:
   script:
-    - python3 user-interface/RunGame.py --arg myArg < inputs.txt
+    - python3 app.py
   artifacts:
     when: always
