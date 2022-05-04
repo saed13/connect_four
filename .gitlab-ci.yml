@@ -22,6 +22,6 @@ before_script:
 
 run:
   script:
-    - python3 app.py
+    - python3 user_interface/RunGame.py
   artifacts:
     when: always
