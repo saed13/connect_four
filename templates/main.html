@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Game</title>
+</head>
+<body>
+    <canvas id="my-canvas" width="722px" height="622px"></canvas>
+</body>
+
+<script>
+    const sessionNum = "{{ session }}"
+    const board = new Image()
+    const chip1 = new Image()
+    const chip2 = new Image()
+    board.src = '{{ user_image }}'
+    chip1.src = '{{ chips }}' + '/chip_1.png'
+    chip2.src = '{{ chips }}' + '/chip_2.png'
+</script>
+<script src='{{javascript}}/printBoard.js'></script>
+</html>
