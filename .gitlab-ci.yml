@@ -5,7 +5,7 @@ image: python:3.8-slim
 # only cache local items.
 variables:
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
-  FF_NETWORK_PER_BUILD: "true"
+
 
 cache:
   paths:
