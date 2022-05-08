@@ -24,8 +24,8 @@ before_script:
  
 test:
   services:
-    - name: docker:dind
-      alias: localhost
+    - docker:dind
+      localhost
     - selenium/standalone-chrome
   script:
     - nohup python3 -m flask run &
