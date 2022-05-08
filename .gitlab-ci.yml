@@ -16,7 +16,6 @@ before_script:
   - apt-get update && apt-get --assume-yes install netcat
   - sed settings.ini.template > settings.ini.
   - python --version  # For debugging
-  - pip --version
   - pip install virtualenv
   - virtualenv venv
   - source venv/bin/activate
