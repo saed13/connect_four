@@ -22,7 +22,7 @@ before_script:
  
 test:
   services:
-    - nohup python3 -m flask run &
     - selenium/standalone-chrome
   script:
+    - nohup python3 -m flask run &
     - python3 -m behave features
