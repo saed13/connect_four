@@ -27,7 +27,7 @@ def step_impl(context):
     context.driver.set_window_size(1920, 1080, context.driver.window_handles[0])
     context.action_chains = ActionChains(context.driver)
 
-    context.driver.get("https://localhost:5000")
+    context.driver.get("http://localhost:5000")
     time.sleep(1)
 
 
