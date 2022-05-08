@@ -27,5 +27,4 @@ test:
   script:
     - nohup python3 -m flask run &
     - sleep 5
-    - nc -v localhost 5000
     - python3 -m behave features
