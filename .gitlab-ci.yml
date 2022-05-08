@@ -13,7 +13,7 @@ cache:
 
 
 before_script:
-  - apt-get update && apt-get --assume-yes install netcat && apt-get install docker-compose -y
+  - apt-get update && apt-get --assume-yes install netcat
   - sed settings.ini.template > settings.ini.
   - python --version  # For debugging
   - pip install virtualenv
@@ -25,6 +25,6 @@ test:
   services:
     - selenium/standalone-chrome
   script:
-    - docker-compose up &
+    - python3 -m flask run &
     - sleep 50
     - python3 -m behave features
