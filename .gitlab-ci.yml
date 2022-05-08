@@ -26,5 +26,5 @@ test:
     - selenium/standalone-chrome
   script:
     - docker-compose up &
-    - sleep 5
+    - sleep 50
     - python3 -m behave features
