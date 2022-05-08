@@ -12,8 +12,17 @@ import time
 @given("I opened the game in my browser")
 def step_impl(context):
     chromeOptions = webdriver.ChromeOptions()
+    chromeOptions.add_argument("--no-sandbox")
+    chromeOptions.add_argument("--disable-setuid-sandbox")
+    chromeOptions.add_argument('--profile-directory=Default')
 
-    context.driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+    chromeOptions.add_argument("--remote-debugging-port=9222")
+    chromeOptions.add_argument("--disable-dev-shm-using")
+    chromeOptions.add_argument("--disable-extensions")
+    chromeOptions.add_argument("--disable-gpu")
+    chromeOptions.add_argument("start-maximized")
+    chromeOptions.add_argument("disable-infobars")
+    context.driver = webdriver.Remote(command_executor='http://172.17.0.2:4444/wd/hub', options=chromeOptions)
     #context.driver = webdriver.Remote(command_executor='http://172.17.0.2:4444/wd/hub', options=chromeOptions)
     context.driver.set_window_size(1920, 1080, context.driver.window_handles[0])
     context.action_chains = ActionChains(context.driver)
