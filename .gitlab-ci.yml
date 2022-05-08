@@ -21,7 +21,7 @@ before_script:
   - pip install -r requirements.txt
 run:
   script:
-    - python3 app.py
+    - python3 -m flask run
     - selenium/standalone-chrome
   artifacts:
     when: always
