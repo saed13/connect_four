@@ -19,7 +19,7 @@ before_script:
   - virtualenv venv
   - source venv/bin/activate
   - pip install -r requirements.txt
-  - nohup python3 -m flask run
+  - & nohup python3 -m flask run &
 test:
   services:
     - selenium/standalone-chrome
