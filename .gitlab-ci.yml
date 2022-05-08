@@ -26,5 +26,7 @@ run:
     when: always
 
 test:
+  services:
+    - selenium/standalone-chrome
   script:
     - python3 -m behave features
