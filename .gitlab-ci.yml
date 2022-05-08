@@ -29,4 +29,5 @@ test:
   services:
     - selenium/standalone-chrome
   script:
+    - python3 app.py
     - python3 -m behave features
