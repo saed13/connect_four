@@ -22,6 +22,6 @@ before_script:
 
 run:
   script:
-    - sudo systemctl start python3 app.py
+    - systemctl start python3 app.py
   artifacts:
     when: always
