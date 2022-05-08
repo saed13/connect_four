@@ -19,9 +19,12 @@ before_script:
   - virtualenv venv
   - source venv/bin/activate
   - pip install -r requirements.txt
-
 run:
   script:
     - python3 user_interface/RunGame.py
   artifacts:
     when: always
+
+test:
+  script:
+    - python3 -m behave features

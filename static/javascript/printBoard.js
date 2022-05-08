@@ -1,52 +1,64 @@
-let finished = false
-const canvas = document.getElementById("my-canvas")
-const context = canvas.getContext("2d")
-board.onload = () => {
-  context.drawImage(board, 0, 0)
+let finished = false;
+let board=document.querySelector(".board")
+
+
+createBoard()
+
+//createBoard function
+function createBoard(){
+    let y = 5;
+    for(let i = 0; i < 42; i++){
+        let div = document.createElement("div");
+        div.setAttribute("data-id", i);
+        div.className = "square";
+
+        let x = i % 7;
+        div.id = `col${x}-row${y}`
+        div.addEventListener('click', () => {
+            sendPos(x*100+6, x);
+        });
+
+        board.appendChild(div)
+
+        if (x === 6) {
+            y--;
+        }
+    }
 }
 
-function getCursorPosition(canvas, event) {
-    const rect = canvas.getBoundingClientRect()
-    const x = event.clientX - rect.left
-    const y = event.clientY - rect.top
-    sendPos(x)
-}
-
-const myCanvas = document.querySelector('#my-canvas')
-myCanvas.addEventListener('mousedown', function(e) {
-    getCursorPosition(myCanvas, e)
-})
-
-const sendPos = (x) => {
+const sendPos = (col) => {
     let body = {
-        x: x,
+        x: col,
         session: sessionNum
     }
+
     fetch('/post_pos',{
-     method: 'POST',
-    headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-    },
-    body: JSON.stringify(body)
-    })
-        .then((response) => response.json())
-        .then(res => {
-            if (!res.full) {
-                if (res.finished && !finished) {
-                    if (res.p1) {
-                        context.drawImage(chip1, res.pos[0], res.pos[1])
-                    } else {
-                        context.drawImage(chip2, res.pos[0], res.pos[1])
-                    }
-                    finished = true
-                } else if (!res.finished) {
-                    if (res.p1) {
-                        context.drawImage(chip1, res.pos[0], res.pos[1])
-                    } else {
-                        context.drawImage(chip2, res.pos[0], res.pos[1])
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify(body)
+        })
+            .then((response) => response.json())
+            .then(res => {
+                if (!res.full) {
+                    if (res.finished && !finished) {
+                        if (res.p1) {
+                            document.getElementById(`col${res.pos[0]}-row${res.pos[1]}`).classList.add("player-one");
+                        } else {
+                            document.getElementById(`col${res.pos[0]}-row${res.pos[1]}`).classList.add("player-two");
+                        }
+
+                        finished = true;
+                    } else if (!res.finished) {
+                        if (res.p1) {
+                            document.getElementById(`col${res.pos[0]}-row${res.pos[1]}`).classList.add("player-one");
+                        } else {
+                            document.getElementById(`col${res.pos[0]}-row${res.pos[1]}`).classList.add("player-two");
+                            //document.getElementById(`col${res.col}-row${res.pos[1]}`).style.backgroundColor = "#ffeb3b";
+                        }
                     }
                 }
-            }
-        })
+            });
 }
