@@ -22,6 +22,7 @@ before_script:
 run:
   script:
     - python3 app.py
+    - selenium/standalone-chrome
   artifacts:
     when: always
 
