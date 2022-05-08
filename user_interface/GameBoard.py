@@ -108,6 +108,7 @@ class GameBoard:
 
         self.p1 = not self.p1
         self.p2 = not self.p2
+
         return winner, place, not self.p1, self.winner
 
     def checkWinner(self):
