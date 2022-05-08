@@ -23,10 +23,8 @@ before_script:
  
 test:
   services:
-    - docker:dind
-      localhost
     - selenium/standalone-chrome
   script:
-    - nohup python3 -m flask run &
+    - docker-compose up &
     - sleep 5
     - python3 -m behave features
