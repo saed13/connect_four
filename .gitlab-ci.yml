@@ -25,9 +25,8 @@ before_script:
 test:
   services:
     - selenium/standalone-chrome
-    - name: saed123/connect-four
-      alias: app
 
   script:
+    - docker-compose up 
     - sleep 10
     - python3 -m behave features
