@@ -14,7 +14,7 @@ cache:
 
 
 before_script:
-  - apt-get update && apt-get --assume-yes install netcat && apt-get install docker-compose -y
+  - apt-get update && apt-get --assume-yes install docker-compose
   - sed settings.ini.template > settings.ini.
   - python --version  # For debugging
   - pip install virtualenv
@@ -28,6 +28,4 @@ test:
     - saed123/connect-four
 
   script:
-    - systemctl start python3 app.py
-  artifacts:
-    when: always
+    - python3 -m behave features
