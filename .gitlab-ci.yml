@@ -43,6 +43,7 @@ test:
   services:
     - selenium/standalone-chrome
     - saed123/connect-four
+    - docker:dind
   
   script:
     - python3 -m behave features
