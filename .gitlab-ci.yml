@@ -25,7 +25,9 @@ before_script:
 test:
   services:
     - selenium/standalone-chrome
-    - docker-compose up &
+    - name: saed123/connect-four
+      alias: app
+
   variables:
     FF_NETWORK_PER_BUILD: "true" 
   script:
