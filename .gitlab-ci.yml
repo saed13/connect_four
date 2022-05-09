@@ -14,8 +14,6 @@ cache:
 
 
 before_script:
-  - apt-get update
-  - sed settings.ini.template > settings.ini.
   - python3 --version  # For debugging
   - pip install virtualenv
   - virtualenv venv
