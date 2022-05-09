@@ -25,7 +25,8 @@ before_script:
 test:
   services:
     - selenium/standalone-chrome
+    - name: app
+      command: ["python3", "-m", "flask", "run"]
   script:
-    - python3 -m flask run &
     - sleep 10
     - python3 -m behave features
