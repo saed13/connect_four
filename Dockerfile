@@ -10,7 +10,7 @@ COPY . .
 ###############################
 FROM base AS prod
 #RUN python3 -m behave features
-RUN python3 -m unittest
+#RUN python3 -m unittest
 
 ENTRYPOINT ["python3"]
 CMD ["app.py"]
