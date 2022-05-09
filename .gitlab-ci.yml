@@ -1,5 +1,5 @@
 
-image: gitlab/dind
+image: python:3.8-slim
 
 # Change pip's cache directory to be inside the project directory since we can
 # only cache local items.
@@ -13,14 +13,12 @@ cache:
     - venv/
 
 before_script:
-    - apt-get update && apt-get install python3 -y && apt-get install python3-pip -y
-    - sed settings.ini.template > settings.ini.
+    - apt-get update
     - python3 --version  # For debugging
     - pip install virtualenv
     - virtualenv venv
     - source venv/bin/activate
     - pip install -r requirements.txt
-    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD"
 
 
 docker-build:
@@ -34,16 +32,15 @@ docker-build:
   # Default branch leaves tag empty (= latest tag)
   # All other branches are tagged with the escaped branch name (commit ref slug)
   script:
-    - docker build --pull -t "saed123/connect-four:latest" .
-    - docker push "saed123/connect-four:latest"
+    - docker build --pull -t "saed123/connect-four-test:latest" .
+    - docker push "saed123/connect-four-test:latest"
   # Run this job in a branch where a Dockerfile exists
  
 test:
 
   services:
     - selenium/standalone-chrome
-    - saed123/connect-four
-    - docker:dind
+    - saed123/connect-four-test
   
   script:
     - python3 -m behave features
