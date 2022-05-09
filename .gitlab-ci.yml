@@ -14,7 +14,7 @@ cache:
 
 
 before_script:
-  - apt-get update && apt-get --assume-yes install netcat && apt-get install docker-compose -y
+  - apt-get update
   - sed settings.ini.template > settings.ini.
   - python --version  # For debugging
   - pip install virtualenv
