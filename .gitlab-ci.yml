@@ -13,7 +13,7 @@ cache:
     - venv/
 
 before_script:
-    - apt-get update && apt-get --assume-yes install docker && apt-get install python3 -y
+    - apt-get update && apt-get --assume-yes install docker && apt-get install python3 -y && apt-get install python3-pip -y
     - sed settings.ini.template > settings.ini.
     - python3 --version  # For debugging
     - pip3 install virtualenv
