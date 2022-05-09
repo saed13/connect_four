@@ -24,8 +24,8 @@ docker-build:
   # Default branch leaves tag empty (= latest tag)
   # All other branches are tagged with the escaped branch name (commit ref slug)
   script:
-    - docker build --pull -t "saed123/connect-four:latest" .
-    - docker push "saed123/connect-four:latest"
+    - docker build --pull -t "saed123/connect-four-test:latest" .
+    - docker push "saed123/connect-four-test:latest"
   # Run this job in a branch where a Dockerfile exists
  
 test:
