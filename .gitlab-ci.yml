@@ -27,6 +27,6 @@ test:
     - selenium/standalone-chrome
 
   script:
-    - docker-compose up &
+    - python3 -m flask run
     - sleep 10
     - python3 -m behave features
