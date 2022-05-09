@@ -28,8 +28,6 @@ test:
     - name: saed123/connect-four
       alias: app
 
-  variables:
-    FF_NETWORK_PER_BUILD: "true" 
   script:
     - sleep 10
     - python3 -m behave features
