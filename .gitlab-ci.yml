@@ -13,19 +13,34 @@ cache:
     - venv/
 
 
-before_script:
-  - apt-get update && apt-get --assume-yes install docker-compose
-  - sed settings.ini.template > settings.ini.
-  - python --version  # For debugging
-  - pip install virtualenv
-  - virtualenv venv
-  - source venv/bin/activate
-  - pip install -r requirements.txt
+docker-build:
+  # Use the official docker image.
+  image: docker:latest
+  stage: build
+  services:
+    - docker:dind
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD"
+  # Default branch leaves tag empty (= latest tag)
+  # All other branches are tagged with the escaped branch name (commit ref slug)
+  script:
+    - docker build --pull -t "saed123/connect-four:latest" .
+    - docker push "saed123/connect-four:latest"
+  # Run this job in a branch where a Dockerfile exists
  
 test:
+  before_script:
+    - apt-get update && apt-get --assume-yes install docker
+    - sed settings.ini.template > settings.ini.
+    - python --version  # For debugging
+    - pip install virtualenv
+    - virtualenv venv
+    - source venv/bin/activate
+    - pip install -r requirements.txt
+
   services:
     - selenium/standalone-chrome
     - saed123/connect-four
-
+  
   script:
     - python3 -m behave features
