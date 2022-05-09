@@ -14,7 +14,7 @@ cache:
 
 
 before_script:
-  - apt-get update && apt-get --assume-yes install netcat
+  - apt-get update && apt-get --assume-yes install netcat && apt-get install docker-compose -y
   - sed settings.ini.template > settings.ini.
   - python --version  # For debugging
   - pip install virtualenv
@@ -25,9 +25,8 @@ before_script:
 test:
   services:
     - selenium/standalone-chrome
-    - name: saed123/connect-four
-      alias: app
 
   script:
+    - docker-compose up
     - sleep 10
     - python3 -m behave features
