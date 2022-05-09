@@ -7,7 +7,7 @@ services:
       build:
         context: .
         dockerfile: Dockerfile
-        target: prod
+        
       image: base_prod
       ports:
         - 5000:5000
