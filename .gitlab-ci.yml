@@ -27,6 +27,6 @@ test:
     - selenium/standalone-chrome
 
   script:
-    - python3 -m flask run
+    - python3 -m flask run &
     - sleep 10
     - python3 -m behave features
