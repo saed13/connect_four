@@ -13,15 +13,6 @@ cache:
     - venv/
 
 
-before_script:
-  - apt-get update && apt-get --assume-yes install docker
-  - sed settings.ini.template > settings.ini.
-  - python --version  # For debugging
-  - pip install virtualenv
-  - virtualenv venv
-  - source venv/bin/activate
-  - pip install -r requirements.txt
-
 docker-build:
   # Use the official docker image.
   image: docker:latest
@@ -39,6 +30,13 @@ docker-build:
  
 test:
   before_script:
+    - apt-get update && apt-get --assume-yes install docker
+    - sed settings.ini.template > settings.ini.
+    - python --version  # For debugging
+    - pip install virtualenv
+    - virtualenv venv
+    - source venv/bin/activate
+    - pip install -r requirements.txt
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD"
 
   services:
