@@ -1,5 +1,5 @@
 
-image: python:3.8-slim
+image: docker/compose:latest
 
 # Change pip's cache directory to be inside the project directory since we can
 # only cache local items.
@@ -14,9 +14,9 @@ cache:
 
 
 before_script:
-  - apt-get update && apt-get --assume-yes install netcat && apt-get install docker-compose -y
+  - apt-get update
   - sed settings.ini.template > settings.ini.
-  - python --version  # For debugging
+  - python3 --version  # For debugging
   - pip install virtualenv
   - virtualenv venv
   - source venv/bin/activate
@@ -27,6 +27,6 @@ test:
     - selenium/standalone-chrome
 
   script:
-    - sudo docker-compose up &
+    - docker-compose up &
     - sleep 10
     - python3 -m behave features
