@@ -1,5 +1,5 @@
 
-image: selenium/standalone-chrome
+image: python:3.8-slim
 
 # Change pip's cache directory to be inside the project directory since we can
 # only cache local items.
@@ -14,7 +14,7 @@ cache:
 
 
 before_script:
-  - sudo apt-get update && apt-get --assume-yes install netcat && apt-get install docker-compose -y && apt-get install python3
+  - apt-get update && apt-get --assume-yes install netcat && apt-get install docker-compose -y
   - sed settings.ini.template > settings.ini.
   - python --version  # For debugging
   - pip install virtualenv
@@ -23,7 +23,9 @@ before_script:
   - pip install -r requirements.txt
  
 test:
+  services:
+    - selenium/standalone-chrome
   script:
-    - docker-compose up &
+    - python3 -m flask run
     - sleep 50
     - python3 -m behave features
