@@ -1,6 +1,7 @@
 *
 */venv
 !test
+!features
 !user_interface
 !templates
 !static

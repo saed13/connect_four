@@ -6,6 +6,7 @@ image: python:3.8-slim
 variables:
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
 
+
 cache:
   paths:
     - .cache/pip
@@ -13,16 +14,18 @@ cache:
 
 
 before_script:
-  - apt-get update && apt-get --assume-yes install netcat && apt-get install docker-compose -y
+  - apt-get update && apt-get --assume-yes install docker-compose
   - sed settings.ini.template > settings.ini.
   - python --version  # For debugging
   - pip install virtualenv
   - virtualenv venv
   - source venv/bin/activate
   - pip install -r requirements.txt
+ 
+test:
+  services:
+    - selenium/standalone-chrome
+    - saed123/connect-four
 
-run:
   script:
-    - systemctl start python3 app.py
-  artifacts:
-    when: always
+    - python3 -m behave features

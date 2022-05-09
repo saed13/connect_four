@@ -1,5 +1,6 @@
 from os import system, name
-
+import redis as redis
+r = redis.Redis()
 
 class GameBoard:
     board = []
@@ -12,7 +13,6 @@ class GameBoard:
         self.winner = None
         self.p = None
         self.board = self.defineBoard([[], [], [], [], [], [], []])
-        self.chipPlace = self.defineChipPlace([[], [], [], [], [], [], []])
 
     def __str__(self):
         return self.toStr()
@@ -27,18 +27,6 @@ class GameBoard:
         for e in array:
             for i in range(0, 6):
                 e.append(" ")
-        return array
-
-    @staticmethod
-    def defineChipPlace(array):
-        """
-
-        :param array:
-        :return:
-        """
-        for i in range(0, len(array)):
-            for e in range(0, 6):
-                array[i].append((16 + 100 * i, 516 - 100 * e))
         return array
 
     def toStr(self):
@@ -108,10 +96,8 @@ class GameBoard:
         :return:
         """
         row = self.board[col].index(' ')
-        if self.p1:
-            place = self.chipPlace[col][row]
-        else:
-            place = self.chipPlace[col][row]
+
+        place = (col, row)
 
         if self.p1:
             self.board[col][row] = "p1"
@@ -122,6 +108,7 @@ class GameBoard:
 
         self.p1 = not self.p1
         self.p2 = not self.p2
+
         return winner, place, not self.p1, self.winner
 
     def checkWinner(self):
