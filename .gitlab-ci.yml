@@ -1,5 +1,5 @@
 
-image: python:3.8-slim
+image: ubuntu:latest
 
 # Change pip's cache directory to be inside the project directory since we can
 # only cache local items.
@@ -13,7 +13,7 @@ cache:
     - venv/
 
 before_script:
-    - apt-get update && apt-get --assume-yes install docker
+    - apt-get update && apt-get --assume-yes install docker && apt-get install python3
     - sed settings.ini.template > settings.ini.
     - python --version  # For debugging
     - pip install virtualenv
