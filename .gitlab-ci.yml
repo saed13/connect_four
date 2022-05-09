@@ -27,6 +27,7 @@ test:
     - selenium/standalone-chrome
   
   script:
-    - docker-compose up & 
+    - docker build --platform=linux/amd64 .
+    - docker run -itd --ip=10.10.9.75 base_prod  
     - sleep 10
     - python3 -m behave features
