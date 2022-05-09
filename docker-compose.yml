@@ -10,3 +10,7 @@ services:
       image: base_prod
       ports:
         - 5000:5000
+      networks:
+        - the_net
+networks:
+  the_net:
