@@ -40,7 +40,8 @@ test:
 
   services:
     - selenium/standalone-chrome
-    - saed123/connect-four-test
+    - name: saed123/connect-four-test
+      alias: connect-four
   variables:
     REDIS_KEY: "$REDIS_KEY"
   script:
