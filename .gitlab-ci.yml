@@ -41,6 +41,14 @@ test:
   services:
     - selenium/standalone-chrome
     - saed123/connect-four
+    redis:
+      image: redis:6.2-alpine
+      restart: always
+      ports:
+        - '6379:6379'
+      command: --save 20 1 --loglevel warning
+      volumes:
+        - redis:/data
   
   script:
     - python3 -m behave features
