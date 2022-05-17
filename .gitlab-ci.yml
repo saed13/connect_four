@@ -41,8 +41,7 @@ test:
   services:
     - selenium/standalone-chrome
     - saed123/connect-four-test
-    - name: redis:6.2-alpine
-      alias: redis
-  
+  variables:
+    REDIS_KEY: "$REDIS_KEY"
   script:
     - python3 -m behave features
