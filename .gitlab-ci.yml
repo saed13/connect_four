@@ -40,7 +40,7 @@ test:
 
   services:
     - selenium/standalone-chrome
-    - saed123/connect-four
+    - saed123/connect-four-test
     - redis:6.2-alpine
   
   script:
