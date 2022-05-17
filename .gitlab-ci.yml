@@ -6,27 +6,41 @@ image: python:3.8-slim
 variables:
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
 
+
 cache:
   paths:
     - .cache/pip
     - venv/
 
 
-before_script:
-  - apt-get update && apt-get --assume-yes install netcat
-  - sed settings.ini.template > settings.ini.
-  - python --version  # For debugging
-  - pip install virtualenv
-  - virtualenv venv
-  - source venv/bin/activate
-  - pip install -r requirements.txt
- 
-test:
+docker-build:
+  # Use the official docker image.
+  image: docker:latest
+  stage: build
   services:
     - docker:dind
-      localhost
-    - selenium/standalone-chrome
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD"
+  # Default branch leaves tag empty (= latest tag)
+  # All other branches are tagged with the escaped branch name (commit ref slug)
   script:
-    - nohup python3 -m flask run &
-    - sleep 5
+    - docker build --pull -t "saed123/connect-four-test:latest" .
+    - docker push "saed123/connect-four-test:latest"
+  # Run this job in a branch where a Dockerfile exists
+ 
+test:
+  before_script:
+    - apt-get update && apt-get --assume-yes install docker
+    - sed settings.ini.template > settings.ini.
+    - python --version  # For debugging
+    - pip install virtualenv
+    - virtualenv venv
+    - source venv/bin/activate
+    - pip install -r requirements.txt
+
+  services:
+    - selenium/standalone-chrome
+    - saed123/connect-four
+  
+  script:
     - python3 -m behave features

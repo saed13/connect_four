@@ -7,17 +7,7 @@ services:
       build:
         context: .
         dockerfile: Dockerfile
-        target: prod
+        
       image: base_prod
       ports:
-        - 3000:5000
-      depends_on:
-        - chrome-container
-
-    chrome-container:
-      container_name: chrome-container
-      image: selenium/standalone-chrome
-      volumes:
-        - /dev/shm:/dev/shm
-      ports:
-        - "4444:4444"
+        - 5000:5000
