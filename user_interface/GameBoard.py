@@ -1,6 +1,15 @@
-from os import system, name
+from os import system, name, environ
+
+from dotenv import load_dotenv
 import redis as redis
-r = redis.Redis()
+load_dotenv()
+REDIS_KEY = environ.get('REDIS_KEY')
+
+r = redis.Redis(host='connect-four.redis.cache.windows.net', port=6380, db=0, password=REDIS_KEY, ssl=True)
+#r = redis.Redis(host='redis')
+r.set("second", "test")
+#print(r.get("test"))
+
 
 class GameBoard:
     board = []
