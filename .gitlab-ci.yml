@@ -12,6 +12,14 @@ cache:
     - .cache/pip
     - venv/
 
+before_script:
+    - apt-get update
+    - python3 --version  # For debugging
+    - pip install virtualenv
+    - virtualenv venv
+    - source venv/bin/activate
+    - pip install -r requirements.txt
+
 
 docker-build:
   # Use the official docker image.
@@ -29,26 +37,11 @@ docker-build:
   # Run this job in a branch where a Dockerfile exists
  
 test:
-  before_script:
-    - apt-get update && apt-get --assume-yes install docker
-    - sed settings.ini.template > settings.ini.
-    - python --version  # For debugging
-    - pip install virtualenv
-    - virtualenv venv
-    - source venv/bin/activate
-    - pip install -r requirements.txt
 
   services:
     - selenium/standalone-chrome
-    - saed123/connect-four
-    redis:
-      image: redis:6.2-alpine
-      restart: always
-      ports:
-        - '6379:6379'
-      command: --save 20 1 --loglevel warning
-      volumes:
-        - redis:/data
+    - saed123/connect-four-test
+    - redis:6.2-alpine
   
   script:
     - python3 -m behave features
