@@ -41,6 +41,7 @@ test:
   services:
     - selenium/standalone-chrome
     - saed123/connect-four-test
-  
+  variables:
+    REDIS_KEY: "$REDIS_KEY"
   script:
     - python3 -m behave features
