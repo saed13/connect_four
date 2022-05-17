@@ -6,7 +6,6 @@ app = Flask(__name__)
 JAVASCRIPT_FOLDER = os.path.join('static', 'javascript')
 
 app.config['JAVASCRIPT_FOLDER'] = JAVASCRIPT_FOLDER
-
 app.config['sessions'] = 0
 
 @app.route('/')
