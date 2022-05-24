@@ -1,33 +1,45 @@
 from os import system, name, environ
-
+from Players import Human, AI
 from dotenv import load_dotenv
 import redis as redis
+
 load_dotenv()
 REDIS_KEY = environ.get('REDIS_KEY')
 
 r = redis.Redis(host='connect-four.redis.cache.windows.net', port=6380, db=0, password=REDIS_KEY, ssl=True)
-#r = redis.Redis(host='http://172.17.0.3')
+# r = redis.Redis(host='http://172.17.0.3')
 r.set("second", "test")
-#print(r.get("test"))
 
+
+# print(r.get("test"))
 
 class GameBoard:
+    """
+    mode 1: player vs player
+    mode 2: player vs AI
+    mode 3: AI vs AI
+    """
     board = []
     p1 = True
     p2 = False
-    p1symbol = "X"
-    p2symbol = "O"
 
-    def __init__(self):
+    def __init__(self, mode=1):
         self.winner = None
         self.p = None
-        self.board = self.defineBoard([[], [], [], [], [], [], []])
+        self.board = self.define_board([[], [], [], [], [], [], []])
+        self._mode = mode
+        self.player1 = Human("John_Doe", 1)
+        self.player2 = Human("John_Doe1", 2)
 
     def __str__(self):
-        return self.toStr()
+        return self.to_str()
+
+    @property
+    def mode(self):
+        return self._mode
 
     @staticmethod
-    def defineBoard(array):
+    def define_board(array):
         """
 
         :param array:
@@ -38,22 +50,22 @@ class GameBoard:
                 e.append(" ")
         return array
 
-    def toStr(self):
+    def to_str(self):
         """
 
         :return:
         """
         transposed = transpose(self.board)
 
-        currentBoard = ""
+        current_board = ""
         for e in transposed:
             for i in e:
-                currentBoard += i + " | "
-            currentBoard += "\n"
+                current_board += i + " | "
+            current_board += "\n"
 
-        return currentBoard
+        return current_board
 
-    def startGame(self):
+    def start_game(self):
         """
 
         :return:
@@ -61,7 +73,7 @@ class GameBoard:
         noWinner = True
         stop = False
 
-    def getInput(self, pos):
+    def get_input(self, pos):
         """
         :param: pos
         :return:
@@ -98,7 +110,28 @@ class GameBoard:
         except EOFError as e:
             exit()
 
-    def addToken(self, col):
+    def AI_move(self):
+        current_player = self.player1 if self.p1 else self.player2
+
+        column = current_player.next_move(self.board)
+        if column == -1:
+            return "full"
+
+        return self.add_token(column)
+
+    def add_player(self, human, name):
+        current_player = 1 if self.player1 is not None else 2
+
+        player = Human(name, current_player) if human else AI(current_player)
+
+        if current_player == 1:
+            self.player1 = player
+        else:
+            self.player2 = player
+
+        return player
+
+    def add_token(self, col):
         """
 
         :param col:
@@ -113,63 +146,71 @@ class GameBoard:
         else:
             self.board[col][row] = "p2"
 
-        winner = self.checkWinner()
+        winner_exists, winner = check_winner(self.board)
+        if winner_exists:
+            self.winner = winner
 
         self.p1 = not self.p1
         self.p2 = not self.p2
 
-        return winner, place, not self.p1, self.winner
+        return winner_exists, place, not self.p1, self.winner
 
-    def checkWinner(self):
-        """
 
-        :return:
-        """
-        horizontal = self.checkShape(transpose(self.board))
-        vertical = self.checkShape(self.board)
-        diagonal = self.checkShape(diagonals(self.board))
-        antidiagonal = self.checkShape(antidiagonals(self.board))
+def check_winner(board):
+    """
 
-        if (antidiagonal or diagonal or vertical or horizontal) is not None:
-            return True
+    :return:
+    """
+    horizontal = check_shape(transpose(board))
+    if horizontal is not None:
+        return True, horizontal
+    vertical = check_shape(board)
+    if vertical is not True:
+        return True, vertical
+    diagonal = check_shape(diagonals(board))
+    if diagonal is not True:
+        return True, diagonal
+    anti_diagonal = check_shape(anti_diagonals(board))
+    if anti_diagonal is not True:
+        return True, anti_diagonal
 
-        return False
+    return False, None
 
-    def checkShape(self, array):
-        """
 
-        :param array
-        :return:
-        """
-        currentWinner = ""
-        fourConnected = 1
+def check_shape(array):
+    """
 
-        for i in array:
-            for e in range(len(i)):
-                if i[e] != " ":
-                    if i[e] == currentWinner:
-                        fourConnected += 1
-                    else:
-                        fourConnected = 1
+    :param array
+    :return:
+    """
+    current_winner = ""
+    four_connected = 1
 
-                    currentWinner = i[e]
-                    if fourConnected == 4:
-                        break
+    for i in array:
+        for e in range(len(i)):
+            if i[e] != " ":
+                if i[e] == current_winner:
+                    four_connected += 1
                 else:
-                    currentWinner = " "
-                    fourConnected = 1
+                    four_connected = 1
 
-            if fourConnected == 4:
-                break
+                current_winner = i[e]
+                if four_connected == 4:
+                    break
+            else:
+                current_winner = " "
+                four_connected = 1
 
-            fourConnected = 1
-            currentWinner = " "
+        if four_connected == 4:
+            break
 
-        if fourConnected == 4:
-            self.winner = currentWinner
-            return currentWinner
+        four_connected = 1
+        current_winner = " "
 
-        return None
+    if four_connected == 4:
+        return current_winner
+
+    return None
 
 
 def transpose(matrix):
@@ -200,7 +241,7 @@ def diagonals(matrix):
             for p in range(h + w - 1)]
 
 
-def antidiagonals(matrix):
+def anti_diagonals(matrix):
     """
     """
     h, w = len(matrix), len(matrix[0])
