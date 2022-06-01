@@ -22,12 +22,13 @@ def step_impl(context):
     chromeOptions.add_argument("--disable-gpu")
     chromeOptions.add_argument("start-maximized")
     chromeOptions.add_argument("disable-infobars")
-    context.driver = webdriver.Remote(command_executor='http://172.17.0.2:4444/wd/hub', options=chromeOptions)
+    #context.driver = webdriver.Remote(command_executor='http://172.17.0.2:4444/wd/hub', options=chromeOptions)
+    context.driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
     #context.driver = webdriver.Remote(command_executor='http://172.17.0.2:4444/wd/hub', options=chromeOptions)
     context.driver.set_window_size(1920, 1080, context.driver.window_handles[0])
     context.action_chains = ActionChains(context.driver)
 
-    context.driver.get("http://172.17.0.4:5000")
+    context.driver.get("http://localhost:5000")
     time.sleep(1)
 
 
@@ -40,18 +41,13 @@ def step_impl(context, col, row):
     time.sleep(0.5)
 
 
-@then('Chip{num} is printed in position ({col},{row})')
-def step_impl(context, num, col, row):
+@then('player{num} has won')
+def step_impl(context, num):
     if num == "1":
-        assert context.driver.find_element(By.CSS_SELECTOR, f"#col{col}-row{row}").value_of_css_property(
-            "Background-Color") == "rgb(255, 0, 0)"
+        assert context.driver.find_element(By.CSS_SELECTOR, f"#winner").get_attribute(
+            "value") == "p1"
     elif num == "2":
-        assert context.driver.find_element(By.CSS_SELECTOR, f"#col{col}-row{row}").value_of_css_property(
-            "Background-Color") == "rgb(255, 255, 0)"
+        assert context.driver.find_element(By.CSS_SELECTOR, f"#winner").get_attribute(
+            "value") == "p2"
 
     time.sleep(0.2)
-
-
-
-
-

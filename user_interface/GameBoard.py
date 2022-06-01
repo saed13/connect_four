@@ -5,9 +5,9 @@ import redis as redis
 load_dotenv()
 REDIS_KEY = environ.get('REDIS_KEY')
 
-r = redis.Redis(host='connect-four.redis.cache.windows.net', port=6380, db=0, password=REDIS_KEY, ssl=True)
+#r = redis.Redis(host='redis')
 #r = redis.Redis(host='http://172.17.0.3')
-r.set("second", "test")
+#r.set("second", "test")
 #print(r.get("test"))
 
 

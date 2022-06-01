@@ -46,8 +46,10 @@ const sendPos = (col) => {
                     if (res.finished && !finished) {
                         if (res.p1) {
                             document.getElementById(`col${res.pos[0]}-row${res.pos[1]}`).classList.add("player-one");
+                            document.getElementById("winner").value = "p1";
                         } else {
                             document.getElementById(`col${res.pos[0]}-row${res.pos[1]}`).classList.add("player-two");
+                            document.getElementById("winner").value = "p2";
                         }
 
                         finished = true;
