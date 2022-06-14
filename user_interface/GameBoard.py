@@ -1,14 +1,14 @@
 from os import system, name, environ
-from Players import Human, AI
+from user_interface.Players import Human, AI
 from dotenv import load_dotenv
 import redis as redis
 
 load_dotenv()
 REDIS_KEY = environ.get('REDIS_KEY')
 
-r = redis.Redis(host='connect-four.redis.cache.windows.net', port=6380, db=0, password=REDIS_KEY, ssl=True)
+#r = redis.Redis(host='connect-four.redis.cache.windows.net', port=6380, db=0, password=REDIS_KEY, ssl=True)
 # r = redis.Redis(host='http://172.17.0.3')
-r.set("second", "test")
+#r.set("second", "test")
 
 
 # print(r.get("test"))
@@ -28,8 +28,8 @@ class GameBoard:
         self.p = None
         self.board = self.define_board([[], [], [], [], [], [], []])
         self._mode = mode
-        self.player1 = Human("John_Doe", 1)
-        self.player2 = Human("John_Doe1", 2)
+        self.player1 = AI(1)
+        self.player2 = AI(2)
 
     def __str__(self):
         return self.to_str()
@@ -113,7 +113,8 @@ class GameBoard:
     def AI_move(self):
         current_player = self.player1 if self.p1 else self.player2
 
-        column = current_player.next_move(self.board)
+        column = current_player.get_AIMove(self.board)
+
         if column == -1:
             return "full"
 
@@ -156,6 +157,7 @@ class GameBoard:
         return winner_exists, place, not self.p1, self.winner
 
 
+#help methods
 def check_winner(board):
     """
 
@@ -164,14 +166,17 @@ def check_winner(board):
     horizontal = check_shape(transpose(board))
     if horizontal is not None:
         return True, horizontal
+
     vertical = check_shape(board)
-    if vertical is not True:
+    if vertical is not None:
         return True, vertical
+
     diagonal = check_shape(diagonals(board))
-    if diagonal is not True:
+    if diagonal is not None:
         return True, diagonal
+
     anti_diagonal = check_shape(anti_diagonals(board))
-    if anti_diagonal is not True:
+    if anti_diagonal is not None:
         return True, anti_diagonal
 
     return False, None

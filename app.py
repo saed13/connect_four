@@ -15,24 +15,24 @@ def start_app():
     javascript = os.path.join(app.config['JAVASCRIPT_FOLDER'])
     app.config['sessions'] += 1
 
-    return render_template("main.html", javascript=javascript, session=app.config['sessions'] - 1)
+    return render_template("main.html", javascript=javascript, session=app.config['sessions'] - 1, mode=2)
 
 
 @app.route('/post_pos', methods=['POST'])
 def get_pos():
-    if app.config['gameBoard' + str(request.get_json()['session'])].mode == 1:
+    if not request.get_json()['AIMove']:
         col = app.config['gameBoard' + str(request.get_json()['session'])].get_input(request.get_json()['x'])
-
         if col != -1:
             row = app.config['gameBoard' + str(request.get_json()['session'])].add_token(col)
             return jsonify({'full': False, 'winner': row[0], 'pos': row[1], 'p1': row[2], 'finished': row[3]}), 200
 
         return jsonify({'full': True}), 200
 
-    row = app.config['gameBoard' + str(request.get_json()['session'])].AI_move()
-    if row == "full":
-        return jsonify({'full': True}), 200
-    return row
+    elif request.get_json()['AIMove']:
+        row = app.config['gameBoard' + str(request.get_json()['session'])].AI_move()
+        if row == "full":
+            return jsonify({'full': True}), 200
+        return jsonify({'full': False, 'winner': row[0], 'pos': row[1], 'p1': row[2], 'finished': row[3]}), 200
 
 
 if __name__ == '__main__':
