@@ -120,8 +120,12 @@ class AI(Player):
         else:
             v = math.inf
             for col in valid_locations:
-                v = min(v, self.alphabeta(col, depth - 1, a, b, True))
-                b = min(b,v)
+                current_player = self.change_player(self._turn)
+                current_board = self.add_token(board, col, current_player)
+                score = min(v, self.alphabeta(current_board, depth - 1, a, b, True))
+                if score < v:
+                    v = score
+                    best_move = col
                 if b <= a:
                     break
                 b = min(b, score)
