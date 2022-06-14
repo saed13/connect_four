@@ -1,6 +1,6 @@
 let finished = false;
 let board=document.querySelector(".board")
-
+let AI = false;
 
 createBoard()
 
@@ -15,8 +15,10 @@ function createBoard(){
         let x = i % 7;
         div.id = `col${x}-row${y}`
         div.addEventListener('click', () => {
-            sendPos(x*100+6, x);
+            AI = false;
+            sendPos(x*100+6, false);
         });
+
 
         board.appendChild(div)
 
@@ -24,12 +26,20 @@ function createBoard(){
             y--;
         }
     }
+    if (mode === '3') {
+        setTimeout(() => {
+            sendPos(Math.floor(Math.random() * 6)*100+6, false);
+        }, 1000);
+    }
 }
 
-const sendPos = (col) => {
+const sendPos = (col, AIMove) => {
+    console.log("ai move: ", AIMove);
+
     let body = {
         x: col,
-        session: sessionNum
+        session: sessionNum,
+        AIMove: AIMove
     }
 
     fetch('/post_pos',{
@@ -54,10 +64,35 @@ const sendPos = (col) => {
 
                         finished = true;
                     } else if (!res.finished) {
+
                         if (res.p1) {
                             document.getElementById(`col${res.pos[0]}-row${res.pos[1]}`).classList.add("player-one");
+                            if (mode === '2' && !AI) {
+                                AI = true;
+                                setTimeout(() => {
+                                    sendPos(null, true);
+                                }, 500);
+                            } else if (mode === '3') {
+                                setTimeout(() => {
+                                    sendPos(null, true);
+                                }, 500);
+                            } else if (AI) {
+                                AI = false
+                            }
                         } else {
                             document.getElementById(`col${res.pos[0]}-row${res.pos[1]}`).classList.add("player-two");
+                            if (mode === '2' && !AI) {
+                                AI = true;
+                                setTimeout(() => {
+                                    sendPos(null, true);
+                                }, 500);
+                            } else if (mode === '3') {
+                                setTimeout(() => {
+                                    sendPos(null, true);
+                                }, 500);
+                            } else if (AI) {
+                                AI = false;
+                            }
                             //document.getElementById(`col${res.col}-row${res.pos[1]}`).style.backgroundColor = "#ffeb3b";
                         }
                     }
