@@ -6,15 +6,17 @@
     <title>Game</title>
 </head>
 <body>
+    <div id="mode" hidden></div>
+    <div id="sessionNum" hidden></div>
+
     <div class="container">
-            <div class="board"></div>
-            <div id="winner" hidden></div>
+        <div id="startMenu">
+            <button id="newGame">New Game</button>
+            <button id="joinGame">Join Game</button>
+        </div>
+        <div class="board" hidden></div>
+        <div id="winner" hidden></div>
     </div>
 </body>
-
-<script>
-    const mode = '{{mode}}';
-    const sessionNum = "{{ session }}"
-</script>
 <script src='{{javascript}}/printBoard.js'></script>
 </html>

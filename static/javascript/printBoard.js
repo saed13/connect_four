@@ -1,10 +1,22 @@
-let finished = false;
-let board=document.querySelector(".board")
-let AI = false;
+let finished = false,
+    newGameBtn = document.getElementById("newGame"),
+    board = document.querySelector(".board"),
+    AI = false,
+    sessionNum = null,
+    mode = null;
 
-createBoard()
+//createBoard()
 
-//createBoard function
+newGameBtn.addEventListener('click',  newGame);
+
+function newGame() {
+
+}
+
+function existingGame() {
+
+}
+//createBoard function, creates the board
 function createBoard(){
     let y = 5;
     for(let i = 0; i < 42; i++){
@@ -33,6 +45,7 @@ function createBoard(){
     }
 }
 
+//sendPos function, gets the position of the piece and sends it to the server
 const sendPos = (col, AIMove) => {
     console.log("ai move: ", AIMove);
 

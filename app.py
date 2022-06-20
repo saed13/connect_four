@@ -10,13 +10,32 @@ app.config['sessions'] = 0
 
 @app.route('/')
 def start_app():
-    app.config['gameBoard' + str(app.config['sessions'])] = GameBoard()
-
     javascript = os.path.join(app.config['JAVASCRIPT_FOLDER'])
-    app.config['sessions'] += 1
+    return render_template("main.html", javascript=javascript)
 
-    return render_template("main.html", javascript=javascript, session=app.config['sessions'] - 1, mode=2)
+@app.route('/start_game', methods=['POST'])
+def start_game():
+    if request.get_json()['existing_session'] == -1:
+        session = app.config['sessions']
 
+        app.config['sessions'] += 1
+        if request.get_json()['mode'] == 1:
+            app.config['gameBoard' + str(app.config['sessions'])] = GameBoard()
+            jsonify({"session": session, "mode": 1})
+
+        elif request.get_json()['mode'] == 2:
+            app.config['gameBoard' + str(request.get_json()['existing_session'])] = GameBoard(2)
+            jsonify({"session": session, "mode": 2})
+
+        elif request.get_json()['mode'] == 3:
+            app.config['gameBoard' + str(request.get_json()['existing_session'])] = GameBoard(3)
+            jsonify({"session": session, "mode": 3})
+
+    else:
+        pass
+        #load and render existing session
+        #app.config['gameBoard' + str(request.get_json()['existing_session'])] = GameBoard()
+    pass
 
 @app.route('/post_pos', methods=['POST'])
 def get_pos():
