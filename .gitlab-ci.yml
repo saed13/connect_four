@@ -32,7 +32,6 @@ docker-build:
 
 
 test:
-  image: docker:20.10.15-dind
   variables:
     GCD_CONTAINER_IMAGE: ${CI_REGISTRY_IMAGE}/connect-four:${CI_COMMIT_REF_SLUG}
   before_script:
@@ -41,7 +40,7 @@ test:
   services:
     - selenium/standalone-chrome
   script:
-    - apk add --update python3
+    - apt-get install --update python3
     - python3 -m ensurepip
     - python -m pip install --upgrade pip
     - pip3 install virtualenv
