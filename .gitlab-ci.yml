@@ -32,16 +32,16 @@ docker-build:
 
 
 test:
+  image: docker:latest
   variables:
     GCD_CONTAINER_IMAGE: ${CI_REGISTRY_IMAGE}/connect-four:${CI_COMMIT_REF_SLUG}
   before_script:
-    - apt-get install docker.io
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.mygit.th-deg.de
 
   services:
     - selenium/standalone-chrome
   script:
-    - apt-get install --update python3
+    - apk add --update python3
     - python3 -m ensurepip
     - python -m pip install --upgrade pip
     - pip3 install virtualenv
