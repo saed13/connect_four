@@ -3,6 +3,8 @@ Scenario: Five tokens will be printed
 
     Given I opened the game in my browser
 
+    When I start a game in the menu
+
     When p click on a position (3,1)
         And p click on a position (4,0)
         And p click on a position (6,3)
@@ -19,6 +21,8 @@ Scenario: Tokens will be printed on the sides
 
     Given I opened the game in my browser
 
+    When I start a game in the menu
+
     When p click on a position (0,0)
         And p click on a position (6,0)
         And p click on a position (0,3)
@@ -32,6 +36,8 @@ Scenario: Tokens will be printed on the sides
 Scenario: One column is clicked on 8 times in a row
 
     Given I opened the game in my browser
+
+    When I start a game in the menu
 
     When p click on a position (3,2)
         And p click on a position (3,1)

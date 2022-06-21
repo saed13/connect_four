@@ -31,6 +31,19 @@ def step_impl(context):
     context.driver.get("http://localhost:5000")
     time.sleep(1)
 
+@when('I start a game in the menu')
+def step_menu(context):
+    new_game_button = context.driver.find_element(
+        By.ID, "newGame"
+    )
+    new_game_button.click()
+    time.sleep(0.5)
+    mode_button = context.driver.find_element(
+        By.ID, "pvp"
+    )
+    mode_button.click()
+    time.sleep(2)
+
 
 @when('p click on a position ({col},{row})')
 def step_impl(context, col, row):
@@ -45,10 +58,10 @@ def step_impl(context, col, row):
 def step_impl(context, num, col, row):
     if num == "1":
         assert context.driver.find_element(By.CSS_SELECTOR, f"#col{col}-row{row}").value_of_css_property(
-            "Background-Color") == "rgb(255, 0, 0)"
+            "Background-Color") == "rgb(216, 17, 89)"
     elif num == "2":
         assert context.driver.find_element(By.CSS_SELECTOR, f"#col{col}-row{row}").value_of_css_property(
-            "Background-Color") == "rgb(255, 255, 0)"
+            "Background-Color") == "rgb(255, 188, 66)"
 
     time.sleep(0.2)
 

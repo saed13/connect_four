@@ -28,21 +28,35 @@ docker-build:
   services:
     - docker:dind
   before_script:
-    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD"
+    - docker login -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}
   # Default branch leaves tag empty (= latest tag)
   # All other branches are tagged with the escaped branch _name (commit ref slug)
   script:
-    - docker build --pull -t "saed123/connect-four-test:latest" .
-    - docker push "saed123/connect-four-test:latest"
+    - docker build . -t ${CI_REGISTRY_IMAGE}/connect-four:${CI_COMMIT_REF_SLUG}
+    - docker push ${CI_REGISTRY_IMAGE}/connect-four:${CI_COMMIT_REF_SLUG}
   # Run this job in a branch where a Dockerfile exists
- 
+  after_script:
+    - docker rmi ${CI_REGISTRY_IMAGE}/connect-four:${CI_COMMIT_REF_SLUG}
+
+
 test:
+  image: docker:20.10.15-dind
+  variables:
+    GCD_CONTAINER_IMAGE: ${CI_REGISTRY_IMAGE}/connect-four:${CI_COMMIT_REF_SLUG}
+  before_script:
+    - docker login -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}
 
   services:
     - selenium/standalone-chrome
-    - name: saed123/connect-four-test
-      alias: connect-four
-  variables:
-    REDIS_KEY: "$REDIS_KEY"
+    - name: saed123/connect_four-test
+      alias: connect_four
   script:
+    - apk add --update python3
+    - python3 -m ensurepip
+    - pip3 install pipenv
+    - source venv/bin/activate
+    - pip3 install -r requirements.txt
     - python3 -m behave features
+  after_script:
+    - docker rmi ${CI_REGISTRY_IMAGE}/gcd:${CI_COMMIT_REF_SLUG}
+

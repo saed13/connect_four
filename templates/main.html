@@ -3,20 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="{{javascript}}/board.css">
+    <link rel="stylesheet" href="{{javascript}}/modal.css">
+    <link rel="stylesheet" href="{{javascript}}/button.css">
     <title>Game</title>
 </head>
 <body>
+
+    <div class="container">
+
+        <div class="board" hidden>
+            <div id="startMenu" class="startMenu">
+                <button id="newGame" class="button">New Game</button>
+                <button id="joinGame" class="button">Join Game</button>
+            </div>
+        </div>
+        <div id="winner" hidden></div>
+    </div>
+
     <div id="mode" hidden></div>
     <div id="sessionNum" hidden></div>
 
-    <div class="container">
-        <div id="startMenu">
-            <button id="newGame">New Game</button>
-            <button id="joinGame">Join Game</button>
-        </div>
-        <div class="board" hidden></div>
-        <div id="winner" hidden></div>
-    </div>
+    <div id="modals"></div>
 </body>
 <script src='{{javascript}}/printBoard.js'></script>
 </html>
