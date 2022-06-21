@@ -48,8 +48,6 @@ test:
 
   services:
     - selenium/standalone-chrome
-    - name: saed123/connect_four-test
-      alias: connect_four
   script:
     - apk add --update python3
     - python3 -m ensurepip
