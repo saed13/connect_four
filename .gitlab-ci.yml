@@ -44,7 +44,7 @@ test:
   variables:
     GCD_CONTAINER_IMAGE: ${CI_REGISTRY_IMAGE}/connect-four:${CI_COMMIT_REF_SLUG}
   before_script:
-    - docker login -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.mygit.th-deg.de
 
   services:
     - selenium/standalone-chrome
