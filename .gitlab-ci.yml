@@ -56,5 +56,5 @@ test:
     - pip3 install -r requirements.txt
     - python3 -m behave features
   after_script:
-    - docker rmi ${CI_REGISTRY_IMAGE}/gcd:${CI_COMMIT_REF_SLUG}
+    - docker rmi ${CI_REGISTRY_IMAGE}/connect-four:${CI_COMMIT_REF_SLUG}
 
