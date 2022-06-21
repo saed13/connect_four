@@ -41,6 +41,7 @@ test:
   services:
     - selenium/standalone-chrome
   script:
+    - apk add --update python3.9.8-slim
     - python3 -m ensurepip
     - pip3 install virtualenv
     - virtualenv venv
