@@ -47,7 +47,6 @@ test:
     - virtualenv venv
     - source venv/bin/activate
     - python3 -m pip install --upgrade pip
-    - pip3 install py3-cffi
     - pip3 install -r requirements.txt
     - python3 -m behave features
   after_script:
