@@ -9,9 +9,6 @@ from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 import time
 import shelve
 import os
-sessions = os.path.abspath("sessions.db")
-print(sessions)
-file = shelve.open("/Users/saed/PycharmProjects/SE/connect_four/sessions")
 
 @given("I opened the game in my browser")
 def step_impl(context):

@@ -11,10 +11,6 @@ import time
 import shelve
 import os
 
-directoryName = os.path.dirname('sessions.db')
-pathToSessionsDir = os.path.abspath(directoryName)
-file = shelve.open(f"{pathToSessionsDir}/sessions")
-
 
 @given("I opened the game in my browser")
 def step_impl(context):
@@ -71,6 +67,9 @@ def step_impl(context, seconds):
 def step_impl(context):
     session_num = context.driver.find_element(By.ID, f"sessionNum").get_attribute("value")
     # print(file)
+    directoryName = os.path.dirname('sessions.db')
+    pathToSessionsDir = os.path.abspath(directoryName)
+    file = shelve.open(f"{pathToSessionsDir}/sessions")
     board = file[f"session{session_num}"].board
     for i in range(len(board)):
         for e in range(len(board[i])):
