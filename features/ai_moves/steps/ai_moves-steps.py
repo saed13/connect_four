@@ -30,8 +30,8 @@ def step_impl(context):
     chromeOptions.add_argument("start-maximized")
     chromeOptions.add_argument("disable-infobars")
     # context.driver = webdriver.Remote(command_executor='http://172.17.0.2:4444/wd/hub', options=chromeOptions)
-    context.driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
-    # context.driver = webdriver.Remote(command_executor='http://172.17.0.2:4444/wd/hub', options=chromeOptions)
+    #context.driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+    context.driver = webdriver.Remote(command_executor='http://172.17.0.2:4444/wd/hub', options=chromeOptions)
     context.driver.set_window_size(1920, 1080, context.driver.window_handles[0])
     context.action_chains = ActionChains(context.driver)
 
