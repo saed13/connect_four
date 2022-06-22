@@ -1,5 +1,7 @@
+import names
 import math
 import user_interface.GameBoard as GameBoard
+import random
 import copy
 
 class Player:
@@ -31,7 +33,7 @@ class Human(Player):
 
 class AI(Player):
     def __init__(self, turn):
-        super(AI, self).__init__('AI', turn, "AI")
+        super(AI, self).__init__(names.get_first_name(), turn, "AI")
         self.tree = None
         self.depth = 5
 
