@@ -1,6 +1,4 @@
 from behave import given, when, then
-import pytest
-from flask import current_app
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
