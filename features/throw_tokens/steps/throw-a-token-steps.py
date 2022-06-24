@@ -61,9 +61,13 @@ def step_impl(context, num, col, row):
             "Background-Color") == "rgb(216, 17, 89)"
     elif num == "2":
         assert context.driver.find_element(By.CSS_SELECTOR, f"#col{col}-row{row}").value_of_css_property(
-            "Background-Color") == "rgb(255, 188, 66)"
+                "Background-Color") == "rgb(255, 188, 66)"
 
     time.sleep(0.2)
+
+
+@then('close the browser')
+def step_impl(context):
     context.driver.quit()
 
 

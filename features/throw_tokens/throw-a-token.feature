@@ -17,6 +17,8 @@ Scenario: Five tokens will be printed
         And Chip2 is printed in position (3,1)
         And Chip1 is printed in position (1,0)
 
+    Then close the browser
+
 Scenario: Tokens will be printed on the sides
 
     Given I opened the game in my browser
@@ -32,6 +34,8 @@ Scenario: Tokens will be printed on the sides
         And Chip2 is printed in position (6,0)
         And Chip1 is printed in position (0,1)
         And Chip2 is printed in position (6,1)
+
+    Then close the browser
 
 Scenario: One column is clicked on 8 times in a row
 
@@ -54,3 +58,5 @@ Scenario: One column is clicked on 8 times in a row
         And Chip2 is printed in position (3,3)
         And Chip1 is printed in position (3,4)
         And Chip2 is printed in position (3,5)
+
+    Then close the browser
