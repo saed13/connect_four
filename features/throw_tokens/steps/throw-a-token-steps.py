@@ -64,6 +64,7 @@ def step_impl(context, num, col, row):
             "Background-Color") == "rgb(255, 188, 66)"
 
     time.sleep(0.2)
+    context.driver.quit()
 
 
 
