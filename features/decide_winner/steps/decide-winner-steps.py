@@ -65,3 +65,4 @@ def step_impl(context, num):
             "value") == "p2"
 
     time.sleep(0.2)
+    context.driver.quit()
