@@ -10,8 +10,8 @@ services:
         
       image: base_prod
       ports:
-        - 3000:5000
+        - 8000:5000
       volumes:
-        - shelve:/connect-four/sessions.db
+        - shelve:/app/sessions
 volumes:
   shelve:

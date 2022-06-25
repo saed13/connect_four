@@ -16,7 +16,8 @@ pathToSessionsDir = os.path.abspath(directoryName)
 
 @app.route('/')
 def start_app():
-    file = shelve.open(f"{pathToSessionsDir}/sessions")
+    file = shelve.open(f"{pathToSessionsDir}/sessions/session")
+    print(pathToSessionsDir)
     try:
         sessions = file['sessions']
         file.close()
@@ -30,11 +31,12 @@ def start_app():
 
 @app.route('/start_game', methods=['POST'])
 def start_game():
-    file = shelve.open(f"{pathToSessionsDir}/sessions")
+    file = shelve.open(f"{pathToSessionsDir}/sessions/session")
     if request.get_json()['existing_session'] == -1:
 
         session = file['sessions']
         file['sessions'] = int(session) + 1
+        print(list(file.keys()))
 
         if request.get_json()['mode'] == 1:
             app.config['gameBoard' + str(session)] = GameBoard(1)
@@ -61,13 +63,63 @@ def start_game():
     pass
 
 
+@app.route('/savegame', methods=['POST'])
+def get_savegame():
+    file = shelve.open(f"{pathToSessionsDir}/sessions/session")
+
+    session = file[str(request.get_json()['session'])]
+
+    print(session.board)
+    saves = jsonify({"board": session.board, "mode":session.mode})
+
+    return saves
+
+
+@app.route('/saves', methods=['POST'])
+def get_saves():
+    file = shelve.open(f"{pathToSessionsDir}/sessions/session")
+    sessions = file["sessions"]
+    print(f"sessions {sessions}")
+    session = [None, None, None]
+    r = int(sessions)
+    counter = 0
+    for i in range(r-1, 0, -1):
+        print(list(file.keys()))
+        print(i)
+        s = file[f"session{str(i)}"]
+        print(s.winner)
+
+        if s.winner == None:
+            print(counter)
+            session[counter] = f"session{str(i)}"
+            counter += 1
+        if counter >= 3:
+            break
+    """if int(sessions) >= 1:
+        s = file[f"session{str(int(sessions)-1)}"]
+        if s.winner == None:
+            session1 = f"session{str(int(sessions)-1)}"
+    if int(sessions) >= 2:
+        s = file[f"session{str(int(sessions) - 2)}"]
+        if s.winner == None:
+            session1 = f"session{str(int(sessions) - 1)}"
+        session2 = f"session{str(int(sessions)-2)}"
+    if int(sessions) >= 3:
+        session3 = f"session{str(int(sessions)-3)}"
+    print(sessions)"""
+    saves = jsonify({"s1": session[0], "s2": session[1], "s3": session[2]})
+
+    return saves
+
+def check_save(s):
+    pass
 @app.route('/post_pos', methods=['POST'])
 def get_pos():
-    file = shelve.open(f"{pathToSessionsDir}/sessions")
+    file = shelve.open(f"{pathToSessionsDir}/sessions/session")
     if not request.get_json()['AIMove']:
-        col = app.config['gameBoard' + str(request.get_json()['session'])].get_input(request.get_json()['x'])
+        col = file['session' + str(request.get_json()['session'])].get_input(request.get_json()['x'])
         if col != -1:
-            row = app.config['gameBoard' + str(request.get_json()['session'])].add_token(col)
+            row = file['session' + str(request.get_json()['session'])].add_token(col)
             file[f"session{str(request.get_json()['session'])}"] = row[4]
 
             file.close()
@@ -76,7 +128,7 @@ def get_pos():
         return jsonify({'full': True}), 200
 
     elif request.get_json()['AIMove']:
-        row = app.config['gameBoard' + str(request.get_json()['session'])].AI_move()
+        row = file['session' + str(request.get_json()['session'])].AI_move()
         file[f"session{str(request.get_json()['session'])}"] = row[4]
 
         file.close()
@@ -86,4 +138,4 @@ def get_pos():
 
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0")
+    app.run(host='0.0.0.0')

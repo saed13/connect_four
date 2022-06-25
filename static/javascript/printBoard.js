@@ -13,7 +13,7 @@ let finished = false,
 //createBoard()
 
 newGameBtn.addEventListener('click',  newGame);
-
+joinGameBtn.addEventListener('click', getSavedGames);
 
 function messageWindow(winner){
 
@@ -48,23 +48,36 @@ function messageWindow(winner){
     modal.style.display = "flex";
 
     // When the user clicks on <span> (x), close the modal
-    span.onclick = function() {
+    modal.onclick = function() {
       modal.style.display = "none";
+      window.location.reload()
     }
 
-    // When the user clicks anywhere outside of the modal, close it
-    /*window.onclick = function(event) {
-      if (event.target === modal) {
-        modal.style.display = "none";
-      }
-    }
+}
+function joinGame(s1,s2,s3){
 
-     */
+    newGameBtn.hidden = true;
+    joinGameBtn.hidden = true;
+    let sv1 = document.createElement("button");
+    sv1.innerHTML = s1;
+    sv1.addEventListener('click',() => getSavedGame(s1))
+    sv1.id = "sv1"
+    startMenu.appendChild(sv1);
+    let sv2 = document.createElement("button");
+    sv2.innerHTML = s2;
+    sv2.addEventListener('click',() => getSavedGame(s2))
+    sv2.id = "sv2"
+    startMenu.appendChild(sv2);
+    let sv3 = document.createElement("button");
+    sv3.innerHTML = s3;
+    sv3.addEventListener('click',() => getSavedGame(s3))
+    sv3.id = "sv3"
+    startMenu.appendChild(sv3);
+
 }
 
 function newGame() {
-    //messageWindow('p1');
-
+    
     newGameBtn.hidden = true;
     joinGameBtn.hidden = true;
     let bt1 = document.createElement("button");
@@ -131,6 +144,8 @@ function existingGame() {
 }
 //createBoard function, creates the board
 function createBoard(){
+    const element = document.getElementById('logo');
+    element.remove();
     let y = 5;
     for(let i = 0; i < 42; i++){
         let div = document.createElement("div");
@@ -157,7 +172,58 @@ function createBoard(){
         }, 1000);
     }
 }
+function getSavedGame(s){
+    fetch('/savegame',{
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify({"session" : s})
+        })
+        .then((response) => response.json())
+        .then((res) => {
+                console.log(res);
+                printSavedGame(res.board);
+                mode = res.mode;
+                sessionNum = s.substring(7); ;
+                console.log(sessionNum);
+                console.log(mode);
+            })
+}
 
+
+
+function getSavedGames () {
+    fetch('/saves',{
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify({})
+        })
+        .then((response) => response.json())
+        .then((res) => {
+                joinGame(res.s1,res.s2,res.s3)
+            })
+
+
+}
+function printSavedGame(board){
+    startMenu.parentNode.removeChild(startMenu);
+
+    createBoard();
+    board.forEach((col, colIndex) =>{
+        col.forEach((row, rowIndex) => {
+            if (row === "p1"){
+                document.getElementById(`col${colIndex}-row${rowIndex}`).classList.add("player-one");
+            } else if (row === "p2") {
+                document.getElementById(`col${colIndex}-row${rowIndex}`).classList.add("player-two");
+            }
+        });
+    });
+}
 //sendPos function, gets the position of the piece and sends it to the server
 const sendPos = (col, AIMove) => {
     console.log("ai move: ", AIMove);

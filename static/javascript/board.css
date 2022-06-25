@@ -3,7 +3,9 @@ body {
     padding:0;
     background-color: rgba(86, 137, 252, 0.55);
 }
-
+.startMenu{
+    max-height: 100px;
+}
 .board {
     border-radius:10px;
     position: fixed;
