@@ -58,22 +58,31 @@ function joinGame(s1,s2,s3){
 
     newGameBtn.hidden = true;
     joinGameBtn.hidden = true;
-    let sv1 = document.createElement("button");
-    sv1.innerHTML = s1;
-    sv1.addEventListener('click',() => getSavedGame(s1))
-    sv1.id = "sv1"
-    startMenu.appendChild(sv1);
-    let sv2 = document.createElement("button");
-    sv2.innerHTML = s2;
-    sv2.addEventListener('click',() => getSavedGame(s2))
-    sv2.id = "sv2"
-    startMenu.appendChild(sv2);
-    let sv3 = document.createElement("button");
-    sv3.innerHTML = s3;
-    sv3.addEventListener('click',() => getSavedGame(s3))
-    sv3.id = "sv3"
-    startMenu.appendChild(sv3);
-
+    if(s1){
+        let sv1 = document.createElement("button");
+        sv1.innerHTML = s1;
+        sv1.addEventListener('click',() => getSavedGame(s1))
+        sv1.id = "sv1"
+        startMenu.appendChild(sv1);}
+    if(s2) {
+        let sv2 = document.createElement("button");
+        sv2.innerHTML = s2;
+        sv2.addEventListener('click', () => getSavedGame(s2))
+        sv2.id = "sv2"
+        startMenu.appendChild(sv2);}
+    if(s3){
+        let sv3 = document.createElement("button");
+        sv3.innerHTML = s3;
+        sv3.addEventListener('click',() => getSavedGame(s3))
+        sv3.id = "sv3"
+        startMenu.appendChild(sv3);}
+    if(!s1 & !s2 & !s3){
+        let back = document.createElement("button");
+        back.innerHTML = "Back";
+        back.addEventListener('click', () => window.location.reload())
+        back.id = "back_btn"
+        startMenu.appendChild(back);
+    }
 }
 
 function newGame() {
