@@ -56,12 +56,6 @@ def start_game():
             file.close()
             return jsonify({"session": session, "mode": 3})
 
-    else:
-        pass
-        # load and render existing session
-        # app.config['gameBoard' + str(request.get_json()['existing_session'])] = GameBoard()
-    pass
-
 
 @app.route('/savegame', methods=['POST'])
 def get_savegame():
@@ -70,7 +64,7 @@ def get_savegame():
     session = file[str(request.get_json()['session'])]
 
     print(session.board)
-    saves = jsonify({"board": session.board, "mode":session.mode})
+    saves = jsonify({"board": session.board, "mode": session.mode})
 
     return saves
 
@@ -83,7 +77,7 @@ def get_saves():
     session = [None, None, None]
     r = int(sessions)
     counter = 0
-    for i in range(r-1, -1, -1):
+    for i in range(r - 1, -1, -1):
         print(list(file.keys()))
         print(i)
         s = file[f"session{str(i)}"]
@@ -100,8 +94,11 @@ def get_saves():
 
     return saves
 
+
 def check_save(s):
     pass
+
+
 @app.route('/post_pos', methods=['POST'])
 def get_pos():
     file = shelve.open(f"{pathToSessionsDir}/sessions")

@@ -6,7 +6,6 @@ image: python:3.8-slim
 variables:
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
 
-
 cache:
   paths:
     - .cache/pip
@@ -40,7 +39,6 @@ docker-build:
   # Run this job in a branch where a Dockerfile exists
 
 test:
-
   services:
     - selenium/standalone-chrome
     - name: saed123/connect-four-test
@@ -49,4 +47,16 @@ test:
    ENV: "$ENV"
   script:
     - python3 -m behave features
+
+release:
+  stage: deploy
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+      when: manual
+  image: registry.gitlab.com/gitlab-org/release-cli:latest
+  script:
+    - release-cli create
+        --name "connect4-${CI_COMMIT_TAG}"
+        --description "A docker image is available at ${CI_REGISTRY_IMAGE}/connect-four:${CI_COMMIT_REF_SLUG}"
+        --tag-name "${CI_COMMIT_TAG}"
 
