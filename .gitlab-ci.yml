@@ -56,7 +56,7 @@ release:
   image: registry.gitlab.com/gitlab-org/release-cli:latest
   script:
     - release-cli create
-        --name "connect4-${CI_COMMIT_TAG}"
+        --name "connect-four-${CI_COMMIT_TAG}"
         --description "A docker image is available at ${CI_REGISTRY_IMAGE}/connect-four:${CI_COMMIT_REF_SLUG}"
         --tag-name "${CI_COMMIT_TAG}"
 
