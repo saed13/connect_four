@@ -29,10 +29,13 @@ def step_impl(context):
     context.action_chains = ActionChains(context.driver)
 
     context.driver.get("http://172.17.0.4:5000")
-    time.sleep(1)
+    time.sleep(3)
 
 @when('I start a game in the menu')
 def step_menu(context):
+    join_game_button = context.driver.find_element(
+        By.CSS_SELECTOR, "joinGame"
+    )
     new_game_button = context.driver.find_element(
         By.CSS_SELECTOR, "newGame"
     )
