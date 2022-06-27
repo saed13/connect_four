@@ -191,6 +191,7 @@ function createBoard(){
         }, 1000);
     }
 }
+
 function getSavedGame(s){
     fetch('/savegame',{
         method: 'POST',
@@ -210,8 +211,6 @@ function getSavedGame(s){
                 console.log(mode);
             })
 }
-
-
 
 function getSavedGames () {
     fetch('/saves',{

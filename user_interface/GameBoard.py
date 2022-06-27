@@ -1,9 +1,5 @@
 from os import system, name
 from user_interface.Players import Human, AI
-from dotenv import load_dotenv
-
-load_dotenv()
-
 
 class GameBoard:
     """

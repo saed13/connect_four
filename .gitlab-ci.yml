@@ -45,9 +45,8 @@ test:
     - selenium/standalone-chrome
     - name: saed123/connect-four-test
       alias: connect-four
+  variables:
+   ENV: "$ENV"
   script:
-    - python3 -m behave features/throw_tokens
-    - python3 -m behave features/decide_winner
-    - python3 -m behave features/ai_moves
-    - python3 -m behave features/load_save
+    - python3 -m behave features
 
