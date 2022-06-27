@@ -26,12 +26,12 @@ def step_impl(context):
     chromeOptions.add_argument("start-maximized")
     chromeOptions.add_argument("disable-infobars")
     # context.driver = webdriver.Remote(command_executor='http://172.17.0.2:4444/wd/hub', options=chromeOptions)
-    # context.driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
-    context.driver = webdriver.Remote(command_executor='http://172.17.0.2:4444/wd/hub', options=chromeOptions)
+    context.driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+    #context.driver = webdriver.Remote(command_executor='http://172.17.0.2:4444/wd/hub', options=chromeOptions)
     context.driver.set_window_size(1920, 1080, context.driver.window_handles[0])
     context.action_chains = ActionChains(context.driver)
 
-    context.driver.get("http://172.17.0.4:5000")
+    context.driver.get("http://localhost:3000")
     time.sleep(1)
 
 
@@ -69,7 +69,8 @@ def step_impl(context):
     # print(file)
     directoryName = os.path.dirname('sessions.db')
     pathToSessionsDir = os.path.abspath(directoryName)
-    file = shelve.open(f"{pathToSessionsDir}/sessions")
+    file = shelve.open(f"{pathToSessionsDir}/sessions/session")
+    print(pathToSessionsDir)
     board = file[f"session{session_num}"].board
     for i in range(len(board)):
         for e in range(len(board[i])):
