@@ -6,11 +6,6 @@ image: python:3.8-slim
 variables:
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
 
-stages:
-  - docker-build
-  - test
-  - release
-
 cache:
   paths:
     - .cache/pip
@@ -54,7 +49,7 @@ test:
     - python3 -m behave features
 
 release:
-  stage: release
+  stage: deploy
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
       when: manual
