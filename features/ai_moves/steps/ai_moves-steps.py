@@ -8,8 +8,6 @@ from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.firefox import GeckoDriverManager
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 import time
-import shelve
-import os
 
 
 @given("I opened the game in my browser")
@@ -52,7 +50,8 @@ def step_menu(context, mode):
 @when('p click on a position ({col},{row})')
 def step_impl(context, col, row):
     square = context.driver.find_element(
-        By.CSS_SELECTOR, f"#col{col}-row{row}")
+        By.CSS_SELECTOR, f"#col{col}-row{row}"
+    )
 
     square.click()
     time.sleep(2)
@@ -65,13 +64,8 @@ def step_impl(context, seconds):
 
 @then('compare if the output is correct')
 def step_impl(context):
-    session_num = context.driver.find_element(By.ID, f"sessionNum").get_attribute("value")
-    # print(file)
-    directoryName = os.path.dirname('sessions.db')
-    pathToSessionsDir = os.path.abspath(directoryName)
-    file = shelve.open(f"{pathToSessionsDir}/sessions/session")
-    print(pathToSessionsDir)
-    board = file[f"session{session_num}"].board
+    board = context.driver.execute_script('return getCurrentBoard()')
+
     for i in range(len(board)):
         for e in range(len(board[i])):
             if board[i][e] != ' ':
@@ -85,3 +79,9 @@ def step_impl(context):
                         "Background-Color") == "rgb(255, 188, 66)"
     time.sleep(3)
     context.driver.quit()
+
+
+@then('close the browser')
+def step_impl(context):
+    context.driver.quit()
+

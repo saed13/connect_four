@@ -83,7 +83,7 @@ def get_saves():
     session = [None, None, None]
     r = int(sessions)
     counter = 0
-    for i in range(r-1, 0, -1):
+    for i in range(r-1, -1, -1):
         print(list(file.keys()))
         print(i)
         s = file[f"session{str(i)}"]

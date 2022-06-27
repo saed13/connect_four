@@ -14,6 +14,8 @@ Scenario: Player vs AI
         And p click on a position (3,4)
 
     Then compare if the output is correct
+
+    Then close the browser
     
 Scenario: AI vs AI
 
@@ -23,4 +25,6 @@ Scenario: AI vs AI
 
     When I wait for 15 seconds
 
-    Then compare if the output is correct    
+    Then compare if the output is correct
+
+    Then close the browser

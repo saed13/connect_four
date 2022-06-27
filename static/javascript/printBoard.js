@@ -8,9 +8,8 @@ let finished = false,
     mode = null,
     PvP = null,
     AIvAI = null,
-    PvAI = null;
-
-//createBoard()
+    PvAI = null,
+    currentBoard = null;
 
 newGameBtn.addEventListener('click',  newGame);
 joinGameBtn.addEventListener('click', getSavedGames);
@@ -54,6 +53,11 @@ function messageWindow(winner){
     }
 
 }
+
+function getCurrentBoard() {
+    return currentBoard;
+}
+
 function joinGame(s1,s2,s3){
 
     newGameBtn.hidden = true;
@@ -63,20 +67,23 @@ function joinGame(s1,s2,s3){
         sv1.innerHTML = s1;
         sv1.addEventListener('click',() => getSavedGame(s1))
         sv1.id = "sv1"
-        startMenu.appendChild(sv1);}
+        startMenu.appendChild(sv1);
+    }
     if(s2) {
         let sv2 = document.createElement("button");
         sv2.innerHTML = s2;
         sv2.addEventListener('click', () => getSavedGame(s2))
         sv2.id = "sv2"
-        startMenu.appendChild(sv2);}
+        startMenu.appendChild(sv2);
+    }
     if(s3){
         let sv3 = document.createElement("button");
         sv3.innerHTML = s3;
         sv3.addEventListener('click',() => getSavedGame(s3))
         sv3.id = "sv3"
-        startMenu.appendChild(sv3);}
-    if(!s1 & !s2 & !s3){
+        startMenu.appendChild(sv3);
+    }
+    if(!s1 && !s2 && !s3){
         let back = document.createElement("button");
         back.innerHTML = "Back";
         back.addEventListener('click', () => window.location.reload())
@@ -148,9 +155,6 @@ function chooseMode(gameMode) {
         });
 }
 
-function existingGame() {
-
-}
 //createBoard function, creates the board
 function createBoard(){
     const element = document.getElementById('logo');
@@ -168,6 +172,12 @@ function createBoard(){
             sendPos(x*100+6, false);
         });
 
+        currentBoard = [
+            ['', '', '', '', '', ''], ['', '', '', '', '', ''],
+            ['', '', '', '', '', ''], ['', '', '', '', '', ''],
+            ['', '', '', '', '', ''], ['', '', '', '', '', ''],
+            ['', '', '', '', '', '']
+        ];
 
         board.appendChild(div);
 
@@ -219,6 +229,7 @@ function getSavedGames () {
 
 
 }
+
 function printSavedGame(board){
     startMenu.parentNode.removeChild(startMenu);
 
@@ -227,12 +238,15 @@ function printSavedGame(board){
         col.forEach((row, rowIndex) => {
             if (row === "p1"){
                 document.getElementById(`col${colIndex}-row${rowIndex}`).classList.add("player-one");
+                currentBoard[colIndex][rowIndex] = "p1"
             } else if (row === "p2") {
                 document.getElementById(`col${colIndex}-row${rowIndex}`).classList.add("player-two");
+                currentBoard[colIndex][rowIndex] = "p2"
             }
         });
     });
 }
+
 //sendPos function, gets the position of the piece and sends it to the server
 const sendPos = (col, AIMove) => {
     console.log("ai move: ", AIMove);
@@ -256,10 +270,12 @@ const sendPos = (col, AIMove) => {
                 if (!res.full) {
                     if (res.finished && !finished) {
                         if (res.p1) {
+                            currentBoard[res.pos[0]][res.pos[1]] = "p1"
                             document.getElementById(`col${res.pos[0]}-row${res.pos[1]}`).classList.add("player-one");
                             document.getElementById("winner").value = "p1";
                             messageWindow("P1");
                         } else {
+                            currentBoard[res.pos[0]][res.pos[1]] = "p2"
                             document.getElementById(`col${res.pos[0]}-row${res.pos[1]}`).classList.add("player-two");
                             document.getElementById("winner").value = "p2";
                             messageWindow("P2");
@@ -269,6 +285,7 @@ const sendPos = (col, AIMove) => {
                     } else if (!res.finished) {
 
                         if (res.p1) {
+                            currentBoard[res.pos[0]][res.pos[1]] = "p1"
                             document.getElementById(`col${res.pos[0]}-row${res.pos[1]}`).classList.add("player-one");
                             if (mode === 2 && !AI) {
                                 AI = true;
@@ -283,6 +300,7 @@ const sendPos = (col, AIMove) => {
                                 AI = false
                             }
                         } else {
+                            currentBoard[res.pos[0]][res.pos[1]] = "p2"
                             document.getElementById(`col${res.pos[0]}-row${res.pos[1]}`).classList.add("player-two");
                             if (mode === 2 && !AI) {
                                 AI = true;
