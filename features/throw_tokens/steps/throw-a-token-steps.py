@@ -34,12 +34,12 @@ def step_impl(context):
 @when('I start a game in the menu')
 def step_menu(context):
     new_game_button = context.driver.find_element(
-        By.ID, "newGame"
+        By.CSS_SELECTOR, "newGame"
     )
     new_game_button.click()
     time.sleep(0.5)
     mode_button = context.driver.find_element(
-        By.ID, "pvp"
+        By.CSS_SELECTOR, "pvp"
     )
     mode_button.click()
     time.sleep(2)
