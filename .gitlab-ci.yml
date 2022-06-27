@@ -11,13 +11,6 @@ cache:
     - .cache/pip
     - venv/
 
-before_script:
-    - apt-get update
-    - python3 --version  # For debugging
-    - pip install virtualenv
-    - virtualenv venv
-    - source venv/bin/activate
-    - pip install -r requirements.txt
 
 
 docker-build:
@@ -39,6 +32,13 @@ docker-build:
   # Run this job in a branch where a Dockerfile exists
 
 test:
+  before_script:
+    - apt-get update
+    - python3 --version  # For debugging
+    - pip install virtualenv
+    - virtualenv venv
+    - source venv/bin/activate
+    - pip install -r requirements.txt
   services:
     - selenium/standalone-chrome
     - name: saed123/connect-four-test
