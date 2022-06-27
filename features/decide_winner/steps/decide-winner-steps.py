@@ -7,8 +7,6 @@ from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.firefox import GeckoDriverManager
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 import time
-import shelve
-import os
 
 @given("I opened the game in my browser")
 def step_impl(context):
@@ -30,7 +28,7 @@ def step_impl(context):
     context.action_chains = ActionChains(context.driver)
 
     context.driver.get("http://172.17.0.4:5000")
-    time.sleep(1)
+    time.sleep(3)
 
 @when('I start a game in the menu')
 def step_menu(context):
