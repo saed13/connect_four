@@ -6,6 +6,10 @@ image: python:3.8-slim
 variables:
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
 
+stages:
+  - docker-build
+  - test
+  - release
 
 cache:
   paths:
