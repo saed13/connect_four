@@ -12,6 +12,7 @@ services:
       ports:
         - 8000:5000
       volumes:
-        - shelve:/app/sessions
+        - shelve:/sessions
+
 volumes:
   shelve:
