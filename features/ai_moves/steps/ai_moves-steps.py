@@ -78,7 +78,6 @@ def step_impl(context):
                                                        f"#col{str(i)}-row{str(e)}").value_of_css_property(
                         "Background-Color") == "rgb(255, 188, 66)"
     time.sleep(3)
-    context.driver.quit()
 
 
 @then('close the browser')
