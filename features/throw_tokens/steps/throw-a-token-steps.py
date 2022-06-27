@@ -39,7 +39,7 @@ def step_menu(context):
     new_game_button.click()
     time.sleep(0.5)
     mode_button = context.driver.find_element(
-        By.CSS_SELECTOR, "pvp"
+        By.ID, "pvp"
     )
     mode_button.click()
     time.sleep(2)

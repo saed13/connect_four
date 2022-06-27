@@ -10,7 +10,7 @@ JAVASCRIPT_FOLDER = os.path.join('static', 'javascript')
 
 app.config['JAVASCRIPT_FOLDER'] = JAVASCRIPT_FOLDER
 
-directoryName = os.path.dirname('sessions.db')
+directoryName = os.path.dirname('session.db')
 pathToSessionsDir = os.path.abspath(directoryName)
 
 
