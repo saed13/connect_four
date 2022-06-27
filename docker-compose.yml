@@ -1,7 +1,7 @@
 version: '2'
 services:
     connect-four:
-      container_name: connect-four
+      container_name: connect_four
       stdin_open: true
       tty: true
       build:
@@ -10,4 +10,8 @@ services:
         
       image: base_prod
       ports:
-        - 5000:5000
+        - 8000:5000
+      volumes:
+        - shelve:/app/sessions
+volumes:
+  shelve:

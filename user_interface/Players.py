@@ -102,7 +102,7 @@ class AI(Player):
         valid_locations = self.get_valid_locations(board)
         best_move = None
 
-        if depth == 0:
+        if depth == 0 or self.is_winning(board, 1) or self.is_winning(board, 2):
             return self.evaluate_points(board, self._turn)
 
         if maximizingPlayer:
@@ -152,6 +152,10 @@ class AI(Player):
         score = 0
         piece_count = 0
         streak = other_player
+        if self.is_winning(board):
+            score = 1000
+        if self.is_winning(board):
+            score = -1000
         for row in range(0, len(board)):
             for col in range(0, len(board[row])):
                 if board[row][col] == ' ':
@@ -159,23 +163,30 @@ class AI(Player):
                 if board[row][col] == 'p' + str(current_player):
                     piece_count += 1
                     if piece_count == 3:
-                        score += 10
-                    if piece_count == 4:
                         score += 100
                     elif piece_count == 2:
-                        score += 5
+                        score += 20
+                    elif piece_count == 1:
+                        score += 1
 
                 elif board[row][col] == 'p' + str(other_player):
                     if streak != other_player:
                         piece_count = 0
                     piece_count += 1
                     if piece_count == 3:
-                        score -= 10
-                    elif piece_count == 4:
                         score -= 100
                     elif piece_count == 2:
-                        score -= 5
+                        score -= 20
+                    elif piece_count == 1:
+                        score -= 1
         return score
+
+    def is_winning(self, board): #don't ask me df is going on here.
+        if GameBoard.check_winner(board) and self._turn:
+            return True
+        return False
+
+
 
 """
     # minimax algorithm to determine best move

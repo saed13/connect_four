@@ -1,17 +1,5 @@
-from os import system, name, environ
+from os import system, name
 from user_interface.Players import Human, AI
-from dotenv import load_dotenv
-import redis as redis
-
-load_dotenv()
-REDIS_KEY = environ.get('REDIS_KEY')
-
-#r = redis.Redis(host='connect-four.redis.cache.windows.net', port=6380, db=0, password=REDIS_KEY, ssl=True)
-# r = redis.Redis(host='http://172.17.0.3')
-#r.set("second", "test")
-
-
-# print(r.get("test"))
 
 class GameBoard:
     """
@@ -23,7 +11,7 @@ class GameBoard:
     p1 = True
     p2 = False
 
-    def __init__(self, mode=1):
+    def __init__(self, mode):
         self.winner = None
         self.p = None
         self.board = self.define_board([[], [], [], [], [], [], []])
@@ -154,10 +142,10 @@ class GameBoard:
         self.p1 = not self.p1
         self.p2 = not self.p2
 
-        return winner_exists, place, not self.p1, self.winner
+        return winner_exists, place, not self.p1, self.winner, self
 
 
-#help methods
+# help methods
 def check_winner(board):
     """
 

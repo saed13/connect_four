@@ -28,7 +28,7 @@ def step_impl(context):
     context.action_chains = ActionChains(context.driver)
 
     context.driver.get("http://172.17.0.4:5000")
-    time.sleep(3)
+    time.sleep(1)
 
 @when('I start a game in the menu')
 def step_menu(context):
@@ -43,24 +43,45 @@ def step_menu(context):
     mode_button.click()
     time.sleep(2)
 
-
 @when('p click on a position ({col},{row})')
 def step_impl(context, col, row):
     square = context.driver.find_element(
         By.CSS_SELECTOR, f"#col{col}-row{row}")
 
     square.click()
+    time.sleep(1)
+
+@when('I refresh the browser')
+def ref_browser(context):
+    context.driver.refresh()
+    time.sleep(1)
+
+@when('I join my saved game')
+def join_game(context):
+    join_game_button = context.driver.find_element(
+        By.ID, "joinGame"
+    )
+    join_game_button.click()
+    time.sleep(0.5)
+    last_game = context.driver.find_element(
+        By.ID, "sv1"
+    )
+    last_game.click()
     time.sleep(0.5)
 
 
-@then('player{num} has won')
-def step_impl(context, num):
+@then('Chip{num} is printed in position ({col},{row})')
+def step_impl(context, num, col, row):
     if num == "1":
-        assert context.driver.find_element(By.CSS_SELECTOR, f"#winner").get_attribute(
-            "value") == "p1"
+        assert context.driver.find_element(By.CSS_SELECTOR, f"#col{col}-row{row}").value_of_css_property(
+            "Background-Color") == "rgb(216, 17, 89)"
     elif num == "2":
-        assert context.driver.find_element(By.CSS_SELECTOR, f"#winner").get_attribute(
-            "value") == "p2"
+        assert context.driver.find_element(By.CSS_SELECTOR, f"#col{col}-row{row}").value_of_css_property(
+                "Background-Color") == "rgb(255, 188, 66)"
 
     time.sleep(0.2)
+
+@then('close the browser')
+def step_impl(context):
     context.driver.quit()
+

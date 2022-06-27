@@ -35,7 +35,7 @@ def step_impl(context):
     if environment == 'local':
         context.driver.get("http://127.0.0.1:5000")
     else:
-        context.driver.get("http://172.17.0.4:5000")
+        context.driver.get("http://172.17.0.5:5000")
 
     time.sleep(3)
 
@@ -48,6 +48,20 @@ def step_menu(context):
     time.sleep(0.5)
     mode_button = context.driver.find_element(
         By.ID, "pvp"
+    )
+    mode_button.click()
+    time.sleep(2)
+
+
+@when('I start a game in mode {mode}')
+def step_menu(context, mode):
+    new_game_button = context.driver.find_element(
+        By.ID, "newGame"
+    )
+    new_game_button.click()
+    time.sleep(1)
+    mode_button = context.driver.find_element(
+        By.ID, mode
     )
     mode_button.click()
     time.sleep(2)
@@ -73,6 +87,60 @@ def step_impl(context, num, col, row):
 
     time.sleep(0.2)
 
+
+@then('player{num} has won')
+def step_impl(context, num):
+    if num == "1":
+        assert context.driver.find_element(By.CSS_SELECTOR, f"#winner").get_attribute(
+            "value") == "p1"
+    elif num == "2":
+        assert context.driver.find_element(By.CSS_SELECTOR, f"#winner").get_attribute(
+            "value") == "p2"
+
+    time.sleep(0.2)
+
+
+@when('I wait for {seconds} seconds')
+def step_impl(context, seconds):
+    time.sleep(int(seconds))
+
+
+@when('I join my saved game')
+def join_game(context):
+    join_game_button = context.driver.find_element(
+        By.ID, "joinGame"
+    )
+    join_game_button.click()
+    time.sleep(0.5)
+    last_game = context.driver.find_element(
+        By.ID, "sv1"
+    )
+    last_game.click()
+    time.sleep(0.5)
+
+
+@when('I refresh the browser')
+def ref_browser(context):
+    context.driver.refresh()
+    time.sleep(1)
+
+
+@then('compare if the output is correct')
+def step_impl(context):
+    board = context.driver.execute_script('return getCurrentBoard()')
+
+    for i in range(len(board)):
+        for e in range(len(board[i])):
+            if board[i][e] != ' ':
+                if board[i][e] == 'p1':
+                    assert context.driver.find_element(By.CSS_SELECTOR,
+                                                       f"#col{str(i)}-row{str(e)}").value_of_css_property(
+                        "Background-Color") == "rgb(216, 17, 89)"
+                elif board[i][e] == 'p2':
+                    assert context.driver.find_element(By.CSS_SELECTOR,
+                                                       f"#col{str(i)}-row{str(e)}").value_of_css_property(
+                        "Background-Color") == "rgb(255, 188, 66)"
+    time.sleep(3)
 
 @then('close the browser')
 def step_impl(context):

@@ -34,8 +34,11 @@ docker-build:
   script:
     - docker build --pull -t "saed123/connect-four-test:latest" .
     - docker push "saed123/connect-four-test:latest"
+  after_script:
+    - docker rmi saed123/connect-four-test:latest
+
   # Run this job in a branch where a Dockerfile exists
- 
+
 test:
 
   services:
@@ -43,6 +46,7 @@ test:
     - name: saed123/connect-four-test
       alias: connect-four
   variables:
-    REDIS_KEY: "$REDIS_KEY"
+   ENV: "$ENV"
   script:
     - python3 -m behave features
+
