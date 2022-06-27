@@ -10,13 +10,13 @@ JAVASCRIPT_FOLDER = os.path.join('static', 'javascript')
 
 app.config['JAVASCRIPT_FOLDER'] = JAVASCRIPT_FOLDER
 
-directoryName = os.path.dirname('session.db')
+directoryName = os.path.dirname('sessions.db')
 pathToSessionsDir = os.path.abspath(directoryName)
 
 
 @app.route('/')
 def start_app():
-    file = shelve.open(f"{pathToSessionsDir}/sessions/session")
+    file = shelve.open(f"{pathToSessionsDir}/sessions")
     print(pathToSessionsDir)
     try:
         sessions = file['sessions']
@@ -31,7 +31,7 @@ def start_app():
 
 @app.route('/start_game', methods=['POST'])
 def start_game():
-    file = shelve.open(f"{pathToSessionsDir}/sessions/session")
+    file = shelve.open(f"{pathToSessionsDir}/sessions")
     if request.get_json()['existing_session'] == -1:
 
         session = file['sessions']
@@ -65,7 +65,7 @@ def start_game():
 
 @app.route('/savegame', methods=['POST'])
 def get_savegame():
-    file = shelve.open(f"{pathToSessionsDir}/sessions/session")
+    file = shelve.open(f"{pathToSessionsDir}/sessions")
 
     session = file[str(request.get_json()['session'])]
 
@@ -77,7 +77,7 @@ def get_savegame():
 
 @app.route('/saves', methods=['POST'])
 def get_saves():
-    file = shelve.open(f"{pathToSessionsDir}/sessions/session")
+    file = shelve.open(f"{pathToSessionsDir}/sessions")
     sessions = file["sessions"]
     print(f"sessions {sessions}")
     session = [None, None, None]
@@ -95,18 +95,7 @@ def get_saves():
             counter += 1
         if counter >= 3:
             break
-    """if int(sessions) >= 1:
-        s = file[f"session{str(int(sessions)-1)}"]
-        if s.winner == None:
-            session1 = f"session{str(int(sessions)-1)}"
-    if int(sessions) >= 2:
-        s = file[f"session{str(int(sessions) - 2)}"]
-        if s.winner == None:
-            session1 = f"session{str(int(sessions) - 1)}"
-        session2 = f"session{str(int(sessions)-2)}"
-    if int(sessions) >= 3:
-        session3 = f"session{str(int(sessions)-3)}"
-    print(sessions)"""
+
     saves = jsonify({"s1": session[0], "s2": session[1], "s3": session[2]})
 
     return saves
@@ -115,7 +104,7 @@ def check_save(s):
     pass
 @app.route('/post_pos', methods=['POST'])
 def get_pos():
-    file = shelve.open(f"{pathToSessionsDir}/sessions/session")
+    file = shelve.open(f"{pathToSessionsDir}/sessions")
     if not request.get_json()['AIMove']:
         col = file['session' + str(request.get_json()['session'])].get_input(request.get_json()['x'])
         if col != -1:
