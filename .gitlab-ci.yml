@@ -34,6 +34,7 @@ docker-build:
 test:
   before_script:
     - apt-get update
+    - apt-get install -y ping
     - apt install -y iputils-ping
     - python3 --version  # For debugging
     - pip install virtualenv
@@ -47,6 +48,5 @@ test:
   variables:
    ENV: "$ENV"
   script:
-    - python3 -c "import socket; print(socket.gethostbyname('connect-four'))"
-    - export IP_ADDRESS=$(python3 -c "import socket; print(socket.gethostbyname('connect-four'))")
+    - ping connect-four
     - python3 -m behave features
