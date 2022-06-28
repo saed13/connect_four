@@ -47,5 +47,5 @@ test:
   variables:
    ENV: "$ENV"
   script:
-    - export IP_ADDRESS=http://172.17.0.5:5000
+    - export IP_ADDRESS=$(python3 -c "import socket; print(socket.gethostbyname('connect-four'))")
     - python3 -m behave features
