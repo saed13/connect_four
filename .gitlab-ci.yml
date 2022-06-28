@@ -47,6 +47,6 @@ test:
   variables:
    ENV: "$ENV"
   script:
-    - $(python3 -c "import socket; print(socket.gethostbyname('connect-four'))")
+    - python3 -c "import socket; print(socket.gethostbyname('connect-four'))"
     - export IP_ADDRESS=$(python3 -c "import socket; print(socket.gethostbyname('connect-four'))")
     - python3 -m behave features
