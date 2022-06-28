@@ -34,7 +34,7 @@ docker-build:
 test:
   before_script:
     - apt-get update
-    - apt install iputils-ping
+    - apt install -y iputils-ping
     - python3 --version  # For debugging
     - pip install virtualenv
     - virtualenv venv
