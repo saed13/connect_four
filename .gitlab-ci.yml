@@ -47,5 +47,5 @@ test:
   variables:
    ENV: "$ENV"
   script:
-    - ping -c 10 connect-four
+    - export IP_ADDRESS=http://172.17.0.5:5000
     - python3 -m behave features

@@ -36,7 +36,7 @@ def step_impl(context):
     if environment == 'local':
         context.driver.get("http://localhost:8000")
     else:
-        context.driver.get("http://saed123__connect-four-test")
+        context.driver.get(os.environ['IP_ADDRESS'])
 
     time.sleep(3)
 
