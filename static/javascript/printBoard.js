@@ -14,6 +14,7 @@ let finished = false,
 newGameBtn.addEventListener('click',  newGame);
 joinGameBtn.addEventListener('click', getSavedGames);
 
+
 function messageWindow(winner){
 
     let modal = document.createElement("div");
