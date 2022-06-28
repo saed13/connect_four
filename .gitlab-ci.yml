@@ -46,4 +46,5 @@ test:
   variables:
    ENV: "$ENV"
   script:
+    - ping connect-four
     - python3 -m behave features

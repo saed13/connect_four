@@ -36,7 +36,7 @@ def step_impl(context):
     if environment == 'local':
         context.driver.get("http://localhost:8000")
     else:
-        context.driver.get("http://172.17.0.5:5000")
+        context.driver.get("http://connect-four:5000")
 
     time.sleep(3)
 
