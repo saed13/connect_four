@@ -35,7 +35,6 @@ test:
   before_script:
     - apt-get update
     - apt-get install -y iputils-ping
-    - apt install -y iputils-ping
     - python3 --version  # For debugging
     - pip install virtualenv
     - virtualenv venv
