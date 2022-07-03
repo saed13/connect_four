@@ -37,6 +37,7 @@ def step_impl(context):
         context.driver.get("http://localhost:8000")
     else:
         my_string = os.environ['IP']
+        print(my_string)
         ip = my_string[my_string.find("(") + 1:my_string.find(")")]
         context.driver.get(f"http://{ip}:5000")
 
