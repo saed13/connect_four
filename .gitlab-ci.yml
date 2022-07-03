@@ -6,19 +6,11 @@ image: python:3.8-slim
 variables:
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
 
-
 cache:
   paths:
     - .cache/pip
     - venv/
 
-before_script:
-    - apt-get update
-    - python3 --version  # For debugging
-    - pip install virtualenv
-    - virtualenv venv
-    - source venv/bin/activate
-    - pip install -r requirements.txt
 
 
 docker-build:
@@ -40,7 +32,15 @@ docker-build:
   # Run this job in a branch where a Dockerfile exists
 
 test:
-
+  before_script:
+    - apt-get update
+    - apt-get install -y iputils-ping
+    - apt install -y iputils-ping
+    - python3 --version  # For debugging
+    - pip install virtualenv
+    - virtualenv venv
+    - source venv/bin/activate
+    - pip install -r requirements.txt
   services:
     - selenium/standalone-chrome
     - name: saed123/connect-four-test
@@ -48,5 +48,5 @@ test:
   variables:
    ENV: "$ENV"
   script:
+    - ping connect-four
     - python3 -m behave features
-

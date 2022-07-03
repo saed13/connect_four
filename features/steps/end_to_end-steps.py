@@ -9,6 +9,7 @@ from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 import time
 import os
 from dotenv import load_dotenv
+
 load_dotenv()
 environment = os.environ['ENV']
 
@@ -33,11 +34,12 @@ def step_impl(context):
     context.driver.set_window_size(1920, 1080, context.driver.window_handles[0])
     context.action_chains = ActionChains(context.driver)
     if environment == 'local':
-        context.driver.get("http://127.0.0.1:5000")
+        context.driver.get("http://localhost:8000")
     else:
-        context.driver.get("http://172.17.0.5:5000")
+        context.driver.get('www.connect-four')
 
     time.sleep(3)
+
 
 @when('I start a game in the menu')
 def step_menu(context):
@@ -83,7 +85,7 @@ def step_impl(context, num, col, row):
             "Background-Color") == "rgb(216, 17, 89)"
     elif num == "2":
         assert context.driver.find_element(By.CSS_SELECTOR, f"#col{col}-row{row}").value_of_css_property(
-                "Background-Color") == "rgb(255, 188, 66)"
+            "Background-Color") == "rgb(255, 188, 66)"
 
     time.sleep(0.2)
 
@@ -142,11 +144,7 @@ def step_impl(context):
                         "Background-Color") == "rgb(255, 188, 66)"
     time.sleep(3)
 
+
 @then('close the browser')
 def step_impl(context):
     context.driver.quit()
-
-
-
-
-
