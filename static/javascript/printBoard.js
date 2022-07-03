@@ -10,7 +10,6 @@ let finished = false,
     AIvAI = null,
     PvAI = null,
     currentBoard = null;
-    clicked = false;
 
 newGameBtn.addEventListener('click',  newGame);
 joinGameBtn.addEventListener('click', getSavedGames);
@@ -19,7 +18,6 @@ joinGameBtn.addEventListener('click', getSavedGames);
 function messageWindow(winner){
 
     let modal = document.createElement("div");
-    //modal.setAttribute("modal",winner + "wins!");
     modal.classList.add("modal");
 
     let modal_content = document.createElement("div");
@@ -40,7 +38,6 @@ function messageWindow(winner){
 
     let p = document.createElement("p");
     p.classList.add("p");
-    //p.setAttribute("p",winner + "wins!");
     p.innerHTML = winner + " has won the game!"
     modal_content.appendChild(p)
 
@@ -169,14 +166,15 @@ function createBoard(){
 
         let x = i % 7;
         div.id = `col${x}-row${y}`
-        div.addEventListener('click', () => {
-            if(!clicked){AI = false;
-                sendPos(x*100+6, false);
-                clicked = true
-                setTimeout(()=>{clicked = false},1000)
-            }
+        if(mode !== 3) {
+            div.addEventListener('click', () => {
+                if (!AI) {
+                    AI = false;
+                    sendPos(x * 100 + 6, false);
+                }
 
-        });
+            });
+        }
 
         currentBoard = [
             ['', '', '', '', '', ''], ['', '', '', '', '', ''],
