@@ -36,7 +36,9 @@ def step_impl(context):
     if environment == 'local':
         context.driver.get("http://localhost:8000")
     else:
-        context.driver.get('www.connect-four')
+        my_string = os.environ['IP']
+        ip = my_string[my_string.find("(") + 1:my_string.find(")")]
+        context.driver.get(f"http://{ip}:5000")
 
     time.sleep(3)
 

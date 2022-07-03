@@ -48,5 +48,5 @@ test:
   variables:
    ENV: "$ENV"
   script:
-    - ping connect-four
+    - export IP=`ping -c 1 econnect-four`
     - python3 -m behave features
