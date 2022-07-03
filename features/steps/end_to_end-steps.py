@@ -39,7 +39,7 @@ def step_impl(context):
         my_string = os.environ['IP']
         print(my_string)
         ip = my_string[my_string.find("(") + 1:my_string.find(")")]
-        context.driver.get("http://", my_string[my_string.find("(") + 1:my_string.find(")")] ,":5000")
+        context.driver.get(f"http://{ip}:5000")
 
     time.sleep(3)
 
