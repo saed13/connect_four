@@ -36,7 +36,10 @@ def step_impl(context):
     if environment == 'local':
         context.driver.get("http://localhost:8000")
     else:
-        context.driver.get("http://172.17.0.5:5000")
+        my_string = os.environ['IP']
+        print(my_string)
+        ip = my_string[my_string.find("(") + 1:my_string.find(")")]
+        context.driver.get(f"http://{ip}:5000")
 
     time.sleep(3)
 
@@ -75,7 +78,7 @@ def step_impl(context, col, row):
         By.CSS_SELECTOR, f"#col{col}-row{row}")
 
     square.click()
-    time.sleep(0.5)
+    time.sleep(1.5)
 
 
 @then('Chip{num} is printed in position ({col},{row})')

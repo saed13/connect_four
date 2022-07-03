@@ -10,6 +10,7 @@ let finished = false,
     AIvAI = null,
     PvAI = null,
     currentBoard = null;
+    clicked = false;
 
 newGameBtn.addEventListener('click',  newGame);
 joinGameBtn.addEventListener('click', getSavedGames);
@@ -169,8 +170,12 @@ function createBoard(){
         let x = i % 7;
         div.id = `col${x}-row${y}`
         div.addEventListener('click', () => {
-            AI = false;
-            sendPos(x*100+6, false);
+            if(!clicked){AI = false;
+                sendPos(x*100+6, false);
+                clicked = true
+                setTimeout(()=>{clicked = false},1000)
+            }
+
         });
 
         currentBoard = [
@@ -249,8 +254,6 @@ function printSavedGame(board){
 
 //sendPos function, gets the position of the piece and sends it to the server
 const sendPos = (col, AIMove) => {
-    console.log("ai move: ", AIMove);
-
     let body = {
         x: col,
         session: sessionNum,
@@ -314,9 +317,12 @@ const sendPos = (col, AIMove) => {
                             } else if (AI) {
                                 AI = false;
                             }
+
                             //document.getElementById(`col${res.col}-row${res.pos[1]}`).style.backgroundColor = "#ffeb3b";
                         }
+
                     }
                 }
-            });
+            })
+
 }

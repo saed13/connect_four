@@ -34,6 +34,7 @@ docker-build:
 test:
   before_script:
     - apt-get update
+    - apt-get install -y iputils-ping
     - python3 --version  # For debugging
     - pip install virtualenv
     - virtualenv venv
@@ -46,4 +47,5 @@ test:
   variables:
    ENV: "$ENV"
   script:
+    - export IP=`ping -c 1 connect-four`
     - python3 -m behave features
