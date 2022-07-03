@@ -49,7 +49,7 @@ def step_impl(context, col, row):
         By.CSS_SELECTOR, f"#col{col}-row{row}")
 
     square.click()
-    time.sleep(1)
+    time.sleep(1.5)
 
 @when('I refresh the browser')
 def ref_browser(context):

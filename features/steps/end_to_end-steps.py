@@ -73,7 +73,7 @@ def step_impl(context, col, row):
         By.CSS_SELECTOR, f"#col{col}-row{row}")
 
     square.click()
-    time.sleep(0.5)
+    time.sleep(1.5)
 
 
 @then('Chip{num} is printed in position ({col},{row})')
