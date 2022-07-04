@@ -1,30 +1,29 @@
 <!DOCTYPE html>
+
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="{{javascript}}/board.css">
-    <link rel="stylesheet" href="{{javascript}}/modal.css">
-    <link rel="stylesheet" href="{{javascript}}/button.css">
-    <title>Game</title>
-</head>
-<body>
-
-    <div class="container">
-
-        <div class="board" hidden>
-            <img id ="logo" src="/static/logo_photo/logo.png" alt="Connect Four!" width="350" height="270">
-            <div id="startMenu" class="startMenu" >
-                <button id="newGame" class="button">New Game</button>
-                <button id="joinGame" class="button">Join Game</button>
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="{{ javascript }}/board.css">
+        <link rel="stylesheet" href="{{ javascript }}/modal.css">
+        <link rel="stylesheet" href="{{ javascript }}/button.css">
+        <title>Game</title>
+    </head>
+    <body>
+        <div class="container">
+            <div class="board" hidden>
+                <img id="logo" src="/static/logo_photo/logo.png" alt="Connect Four!" width="350" height="270">
+                <div id="startMenu" class="startMenu">
+                    <button id="newGame" class="button">New Game</button>
+                    <button id="joinGame" class="button">Join Game</button>
+                </div>
             </div>
+            <div id="winner" hidden></div>
         </div>
-        <div id="winner" hidden></div>
-    </div>
 
-    <div id="mode" hidden></div>
-    <div id="sessionNum" hidden></div>
+        <div id="mode" hidden></div>
+        <div id="sessionNum" hidden></div>
 
-    <div id="modals"></div>
-</body>
-<script src='{{javascript}}/printBoard.js'></script>
+        <div id="modals"></div>
+    </body>
+    <script src='{{ javascript }}/printBoard.js'></script>
 </html>

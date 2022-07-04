@@ -1,4 +1,3 @@
-
 image: python:3.8-slim
 
 # Change pip's cache directory to be inside the project directory since we can
@@ -43,7 +42,7 @@ test:
     - name: saed123/connect-four-test
       alias: connect-four
   variables:
-   ENV: "$ENV"
+    ENV: "$ENV"
   script:
     - export IP=`ping -c 1 connect-four`
     - python3 -m behave features

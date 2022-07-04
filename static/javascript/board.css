@@ -1,59 +1,66 @@
 body {
     margin: 0;
-    padding:0;
+    padding: 0;
     background-color: rgba(86, 137, 252, 0.55);
 }
-.startMenu{
+
+.startMenu {
     max-height: 100px;
 }
+
 .board {
-    border-radius:10px;
+    border-radius: 10px;
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    display:flex;
-    flex-wrap:wrap;
-    height:570px;
-    width:637px;
-    background:#006BA6;
+    display: flex;
+    flex-wrap: wrap;
+    height: 570px;
+    width: 637px;
+    background: #006BA6;
     justify-content: center;
     align-items: center;
-    box-shadow: 11px 8px 37px -15px rgba(0,0,0,0.45);
-    -webkit-box-shadow: 11px 8px 37px -15px rgba(0,0,0,0.45);
-    -moz-box-shadow: 11px 8px 37px -15px rgba(0,0,0,0.45);
+    box-shadow: 11px 8px 37px -15px rgba(0, 0, 0, 0.45);
+    -webkit-box-shadow: 11px 8px 37px -15px rgba(0, 0, 0, 0.45);
+    -moz-box-shadow: 11px 8px 37px -15px rgba(0, 0, 0, 0.45);
 }
+
 .board div {
-    height:85px;
-    width:85px;
-    margin:3px;
+    height: 85px;
+    width: 85px;
+    margin: 3px;
     border-radius: 50%
 }
+
 #startMenu {
-    width:100% !important;
-    height:100% !important;
+    width: 100% !important;
+    height: 100% !important;
     display: flex;
     justify-content: space-around;
     align-items: center;
 
 }
+
 .startMenu div {
-    height:85px;
-    width:85px;
-    margin:3px;
+    height: 85px;
+    width: 85px;
+    margin: 3px;
     border-radius: 50%
 
 }
 
-.square{
-    background:white;
-    box-shadow:inset 3px 3px 10px #000000;
+.square {
+    background: white;
+    box-shadow: inset 3px 3px 10px #000000;
 }
+
 .player-one {
     background: #d81159;
-    box-shadow:inset 3px 3px 10px #000000;
+    box-shadow: inset 3px 3px 10px #000000;
 }
+
 .player-two {
     background: #ffbc42;
-    box-shadow:inset 3px 3px 10px #000000;
+    box-shadow: inset 3px 3px 10px #000000;
 }

@@ -1,18 +1,18 @@
 version: '2'
 services:
-    connect-four:
-      container_name: connect_four
-      stdin_open: true
-      tty: true
-      build:
-        context: .
-        dockerfile: Dockerfile
-        
-      image: base_prod
-      ports:
-        - 8000:5000
-      volumes:
-        - shelve:/sessions
+  connect-four:
+    container_name: connect_four
+    stdin_open: true
+    tty: true
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    image: base_prod
+    ports:
+      - "8000:5000"
+    volumes:
+      - shelve:/sessions
 
 volumes:
   shelve:

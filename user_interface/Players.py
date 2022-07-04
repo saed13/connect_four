@@ -51,22 +51,12 @@ class AI(Player):
             board[col][row] = "p" + str(player)
         return board
 
-    # def remove_token(self, board, col, row):
-    #     if board[col][row] != ' ':
-    #         board[col][row] = ' '
-    #     return board
-
     def get_valid_locations(self, board):
         valid_locations = []
         for i in range(0, len(board)):
             if ' ' in board[i][len(board[i]) - 1]:
                 valid_locations.append(i)
         return valid_locations
-
-    # def next_open_row(self, board, col):
-    #     for row in range(0, len(board[col])):
-    #         if ' ' in board[col][len(board[col])]:
-    #             return row
 
     def get_AIMove(self, board):
         valid_locations = self.get_valid_locations(board)
@@ -75,16 +65,14 @@ class AI(Player):
 
         for location in valid_locations:
             board_copy = copy.deepcopy(board)
-             #copy from updated played board
+            # copy from updated played board
             board_copy[location][board_copy[location].index(' ')] = 'p' + str(self._turn)
-            print("location:", location, "P:", str(self._turn))
-            print(board_copy)
+
             score = self.evaluate_points(board_copy, self._turn)
-            #clear last move
+            # clear last move
             if score > best_score:
                 best_col = location
                 best_score = score
-                print("best_score:", best_score, "best_col:", best_col)
 
         return best_col
 
@@ -99,9 +87,7 @@ class AI(Player):
             best_score = -math.inf
             for col in valid_locations:
                 current_board = self.add_token(board, col, self._turn)
-                print("HHHHHHHHHHHHHH:", col)
                 score = self.alphabeta(current_board, depth - 1, a, b, False)
-                print(score)
                 best_score = max(best_score, score)
                 column = col
                 a = max(a, best_score)
@@ -115,7 +101,6 @@ class AI(Player):
                 current_player = self.change_player(self._turn)
                 current_board = self.add_token(board, col, current_player)
                 score = self.alphabeta(current_board, depth - 1, a, b, True)
-                print(score)
                 best_score = min(best_score, score)
                 column = col
                 b = min(b, best_score)
@@ -124,32 +109,20 @@ class AI(Player):
         return column, best_score
 
     def evaluate_points(self, board, current_player):
-        #print("ST_eval", self._turn)
         score = 0
         # vertical
-        #print("HERE:vert")
         score += self.count_points(board)
         # horizontal
-        #print("Vscore:", score)
-        #print("HERE:horizon")
         score += self.count_points(GameBoard.transpose(board))
-        #print("Hscore:", score)
         # diag
-        #print("HERE:diag")
         score += self.count_points(GameBoard.diagonals(board))
-        #print("Dscore:", score)
         # anti_diag
-        #print("HERE:anti_diag")
         score += self.count_points(GameBoard.anti_diagonals(board))
-        #print("ADscore:", score)
-        #print("Score:", score)
 
         return score
 
     def count_points(self, board):
-        #print("ST:", self._turn)
         other_player = 1 if self._turn == 2 else 2
-        #print("OP:", other_player)
         if self.is_winning(board, self._turn):
             score = 10000
         elif self.is_winning(board, other_player):
@@ -175,7 +148,7 @@ class AI(Player):
                         pass
                     try:
                         if board[col][row] == board[col][row + 1] == board[col][row + 2] == board[col][
-                        row + 3] == 'p' + str(self._turn):
+                            row + 3] == 'p' + str(self._turn):
                             score += 100000
                     except:
                         pass
@@ -185,49 +158,56 @@ class AI(Player):
                     except:
                         pass
                     try:
-                            if board[col][row] == board[col][row + 1] == 'p' + str(other_player):
-                             score -= 15
+                        if board[col][row] == board[col][row + 1] == 'p' + str(other_player):
+                            score -= 15
                     except:
                         pass
                     try:
-                            if board[col][row] == board[col][row + 1] == 'p' + str(other_player) and board[col][row+3] == 'p' + str(self.turn):
-                                score += 100
+                        if board[col][row] == board[col][row + 1] == 'p' + str(other_player) and board[col][
+                            row + 3] == 'p' + str(self.turn):
+                            score += 100
                     except:
                         pass
                     try:
-                            if board[col][row] == board[col][row + 1] == board[col][row + 2] == 'p' + str(other_player):
-                                score -= 70
+                        if board[col][row] == board[col][row + 1] == board[col][row + 2] == 'p' + str(other_player):
+                            score -= 70
                     except:
                         pass
                     try:
-                            if board[col][row] == board[col][row + 1] == board[col][row + 2] == 'p' + str(other_player) and board[col][row+3] == 'p' + str(self.turn):
-                                score += 11000
+                        if board[col][row] == board[col][row + 1] == board[col][row + 2] == 'p' + str(other_player) and \
+                                board[col][row + 3] == 'p' + str(self.turn):
+                            score += 11000
                     except:
                         pass
                     try:
-                            if board[col][row] == board[col][row - 1] == board[col][row - 2] == 'p' + str(other_player) and board[col][row-3] == 'p' + str(self.turn):
-                                score += 11000
+                        if board[col][row] == board[col][row - 1] == board[col][row - 2] == 'p' + str(other_player) and \
+                                board[col][row - 3] == 'p' + str(self.turn):
+                            score += 11000
                     except:
                         pass
                     try:
-                            if board[col][row] == board[col][row + 1] == board[col][row + 3] == 'p' + str(other_player) and board[col][row+2] == 'p' + str(self.turn):
-                                score += 11000
+                        if board[col][row] == board[col][row + 1] == board[col][row + 3] == 'p' + str(other_player) and \
+                                board[col][row + 2] == 'p' + str(self.turn):
+                            score += 11000
                     except:
                         pass
                     try:
-                        if board[col][row] == board[col][row + 1] == board[col][row + 2] == 'p' + str(other_player) and board[col][row + -1] == 'p' + str(self.turn):
+                        if board[col][row] == board[col][row + 1] == board[col][row + 2] == 'p' + str(other_player) and \
+                                board[col][row + -1] == 'p' + str(self.turn):
                             score += 11000
                     except:
                         pass
 
                     try:
-                            if board[col][row] == board[col][row + 1] == board[col][row + 2] == board[col][row + 3] == 'p' + str(other_player):
-                                score -= 10000
+                        if board[col][row] == board[col][row + 1] == board[col][row + 2] == board[col][
+                            row + 3] == 'p' + str(other_player):
+                            score -= 10000
                     except:
                         pass
                     try:
-                            if board[col][row] == board[col][row + 1] == board[col][row + 2] == board[col][row + 4] == 'p' + str(other_player):
-                                score -= 10000
+                        if board[col][row] == board[col][row + 1] == board[col][row + 2] == board[col][
+                            row + 4] == 'p' + str(other_player):
+                            score -= 10000
                     except:
                         pass
         return score

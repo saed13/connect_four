@@ -17,7 +17,6 @@ pathToSessionsDir = os.path.abspath(directoryName)
 @app.route('/')
 def start_app():
     file = shelve.open(f"{pathToSessionsDir}/sessions")
-    print(pathToSessionsDir)
     try:
         sessions = file['sessions']
         file.close()
@@ -36,7 +35,6 @@ def start_game():
 
         session = file['sessions']
         file['sessions'] = int(session) + 1
-        print(list(file.keys()))
 
         if request.get_json()['mode'] == 1:
             app.config['gameBoard' + str(session)] = GameBoard(1)
@@ -62,8 +60,6 @@ def get_savegame():
     file = shelve.open(f"{pathToSessionsDir}/sessions")
 
     session = file[str(request.get_json()['session'])]
-
-    print(session.board)
     saves = jsonify({"board": session.board, "mode": session.mode})
 
     return saves
@@ -73,18 +69,13 @@ def get_savegame():
 def get_saves():
     file = shelve.open(f"{pathToSessionsDir}/sessions")
     sessions = file["sessions"]
-    print(f"sessions {sessions}")
     session = [None, None, None]
     r = int(sessions)
     counter = 0
     for i in range(r - 1, -1, -1):
-        print(list(file.keys()))
-        print(i)
         s = file[f"session{str(i)}"]
-        print(s.winner)
 
         if s.winner == None:
-            print(counter)
             session[counter] = f"session{str(i)}"
             counter += 1
         if counter >= 3:

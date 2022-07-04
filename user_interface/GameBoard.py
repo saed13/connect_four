@@ -1,6 +1,7 @@
 from os import system, name
 from user_interface.Players import Human, AI
 
+
 class GameBoard:
     """
     mode 1: player vs player
