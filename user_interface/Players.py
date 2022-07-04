@@ -4,6 +4,7 @@ import user_interface.GameBoard as GameBoard
 import random
 import copy
 
+
 class Player:
     def __init__(self, name, turn, type):
         self._name = name
@@ -35,7 +36,7 @@ class AI(Player):
     def __init__(self, turn):
         super(AI, self).__init__(names.get_first_name(), turn, "AI")
         self.tree = None
-        self.depth = 5
+        self.depth = 3
 
     def next_move(self, board):
         pass
@@ -49,143 +50,211 @@ class AI(Player):
             row = board[col].index(' ')
             board[col][row] = "p" + str(player)
         return board
-    ''''|6| | | | | | | |
-        |5| | | | | | | |
-        |4| | | | | | | |
-        |3| | | | | | | |
-        |2| | | | | | | |
-        |1| | | | | | | |
-        |0| | | | | | | |'''
+
+    # def remove_token(self, board, col, row):
+    #     if board[col][row] != ' ':
+    #         board[col][row] = ' '
+    #     return board
+
     def get_valid_locations(self, board):
         valid_locations = []
         for i in range(0, len(board)):
             if ' ' in board[i][len(board[i]) - 1]:
                 valid_locations.append(i)
-
         return valid_locations
 
+    # def next_open_row(self, board, col):
+    #     for row in range(0, len(board[col])):
+    #         if ' ' in board[col][len(board[col])]:
+    #             return row
+
     def get_AIMove(self, board):
-        board_copy = copy.deepcopy(board)
-        valid_locations = self.get_valid_locations(board_copy)
+        valid_locations = self.get_valid_locations(board)
         best_score = -math.inf
-        best_col = None
+        best_col = random.choice(valid_locations)
 
         for location in valid_locations:
-            #current_board = self.add_token(board, location, self._turn)
+            board_copy = copy.deepcopy(board)
+             #copy from updated played board
             board_copy[location][board_copy[location].index(' ')] = 'p' + str(self._turn)
-            vert_points = self.evaluate_points(board_copy, self._turn)
-            if vert_points > best_score:
-                best_score = vert_points
+            print("location:", location, "P:", str(self._turn))
+            print(board_copy)
+            score = self.evaluate_points(board_copy, self._turn)
+            #clear last move
+            if score > best_score:
                 best_col = location
-
-            horizontal = GameBoard.transpose(board_copy)
-            horiz_points = self.evaluate_points(horizontal, self._turn)
-            if horiz_points > best_score:
-                best_score = horiz_points
-                best_col = location
-
-            diag = GameBoard.diagonals(board_copy)
-            diag_points = self.evaluate_points(diag, self._turn)
-            if diag_points > best_score:
-                best_score = diag_points
-                best_col = location
-
-            anti_diag = GameBoard.anti_diagonals(board_copy)
-            anti_diag_points = self.evaluate_points(anti_diag, self._turn)
-            if anti_diag_points > best_score:
-                best_score = anti_diag_points
-                best_col = location
+                best_score = score
+                print("best_score:", best_score, "best_col:", best_col)
 
         return best_col
 
     def alphabeta(self, board, depth, a, b, maximizingPlayer):
         valid_locations = self.get_valid_locations(board)
-        best_move = None
 
-        if depth == 0 or self.is_winning(board, 1) or self.is_winning(board, 2):
-            return self.evaluate_points(board, self._turn)
+        if depth == 0 or len(valid_locations) == 0 or self.is_winning(1) or self.is_winning(2):
+            return None, self.evaluate_points(board, self._turn)
 
         if maximizingPlayer:
-            v = -math.inf
+            column = random.choice(valid_locations)
+            best_score = -math.inf
             for col in valid_locations:
                 current_board = self.add_token(board, col, self._turn)
-                score = max(v, self.alphabeta(current_board, depth - 1, a, b, False))
-                if score > v:
-                    v = score
-                    best_move = col
-                if score >= b:
+                print("HHHHHHHHHHHHHH:", col)
+                score = self.alphabeta(current_board, depth - 1, a, b, False)
+                print(score)
+                best_score = max(best_score, score)
+                column = col
+                a = max(a, best_score)
+                if a >= b:
                     break
-                a = max(a, score)
-                return best_move
+            return column, best_score
         else:
-            v = math.inf
+            column = random.choice(valid_locations)
+            best_score = math.inf
             for col in valid_locations:
                 current_player = self.change_player(self._turn)
                 current_board = self.add_token(board, col, current_player)
-                score = min(v, self.alphabeta(current_board, depth - 1, a, b, True))
-                if score < v:
-                    v = score
-                    best_move = col
+                score = self.alphabeta(current_board, depth - 1, a, b, True)
+                print(score)
+                best_score = min(best_score, score)
+                column = col
+                b = min(b, best_score)
                 if b <= a:
                     break
-                b = min(b, score)
-                return best_move
+        return column, best_score
 
     def evaluate_points(self, board, current_player):
+        #print("ST_eval", self._turn)
         score = 0
-        other_player = self.change_player(current_player)
         # vertical
-        score += self.count_points(board, current_player, other_player)
+        #print("HERE:vert")
+        score += self.count_points(board)
         # horizontal
-        horizontal = GameBoard.transpose(board)
-        score += self.count_points(horizontal, current_player, other_player)
+        #print("Vscore:", score)
+        #print("HERE:horizon")
+        score += self.count_points(GameBoard.transpose(board))
+        #print("Hscore:", score)
         # diag
-        diag = GameBoard.diagonals(board)
-        score += self.count_points(diag, current_player, other_player)
+        #print("HERE:diag")
+        score += self.count_points(GameBoard.diagonals(board))
+        #print("Dscore:", score)
         # anti_diag
-        anti_diag = GameBoard.anti_diagonals(board)
-        score += self.count_points(anti_diag, current_player, other_player)
+        #print("HERE:anti_diag")
+        score += self.count_points(GameBoard.anti_diagonals(board))
+        #print("ADscore:", score)
+        #print("Score:", score)
 
         return score
 
-    def count_points(self, board, current_player, other_player):
-        score = 0
-        piece_count = 0
-        streak = other_player
-        if self.is_winning(board):
-            score = 1000
-        if self.is_winning(board):
-            score = -1000
-        for row in range(0, len(board)):
-            for col in range(0, len(board[row])):
-                if board[row][col] == ' ':
-                    break
-                if board[row][col] == 'p' + str(current_player):
-                    piece_count += 1
-                    if piece_count == 3:
-                        score += 100
-                    elif piece_count == 2:
-                        score += 20
-                    elif piece_count == 1:
-                        score += 1
+    def count_points(self, board):
+        #print("ST:", self._turn)
+        other_player = 1 if self._turn == 2 else 2
+        #print("OP:", other_player)
+        if self.is_winning(board, self._turn):
+            score = 10000
+        elif self.is_winning(board, other_player):
+            score = -10000
+        else:
+            score = 0
+            for col in range(0, len(board)):
+                for row in range(0, len(board[col])):
+                    try:
+                        if board[col][row] == 'p' + str(self._turn):
+                            score += 1
+                    except:
+                        pass
+                    try:
+                        if board[col][row] == board[col][row + 1] == 'p' + str(self._turn):
+                            score += 10
+                    except:
+                        pass
+                    try:
+                        if board[col][row] == board[col][row + 1] == board[col][row + 2] == 'p' + str(self._turn):
+                            score += 50
+                    except:
+                        pass
+                    try:
+                        if board[col][row] == board[col][row + 1] == board[col][row + 2] == board[col][
+                        row + 3] == 'p' + str(self._turn):
+                            score += 100000
+                    except:
+                        pass
+                    try:
+                        if board[col][row] == 'p' + str(other_player):
+                            score -= 2
+                    except:
+                        pass
+                    try:
+                            if board[col][row] == board[col][row + 1] == 'p' + str(other_player):
+                             score -= 15
+                    except:
+                        pass
+                    try:
+                            if board[col][row] == board[col][row + 1] == 'p' + str(other_player) and board[col][row+3] == 'p' + str(self.turn):
+                                score += 100
+                    except:
+                        pass
+                    try:
+                            if board[col][row] == board[col][row + 1] == board[col][row + 2] == 'p' + str(other_player):
+                                score -= 70
+                    except:
+                        pass
+                    try:
+                            if board[col][row] == board[col][row + 1] == board[col][row + 2] == 'p' + str(other_player) and board[col][row+3] == 'p' + str(self.turn):
+                                score += 11000
+                    except:
+                        pass
+                    try:
+                            if board[col][row] == board[col][row - 1] == board[col][row - 2] == 'p' + str(other_player) and board[col][row-3] == 'p' + str(self.turn):
+                                score += 11000
+                    except:
+                        pass
+                    try:
+                            if board[col][row] == board[col][row + 1] == board[col][row + 3] == 'p' + str(other_player) and board[col][row+2] == 'p' + str(self.turn):
+                                score += 11000
+                    except:
+                        pass
+                    try:
+                        if board[col][row] == board[col][row + 1] == board[col][row + 2] == 'p' + str(other_player) and board[col][row + -1] == 'p' + str(self.turn):
+                            score += 11000
+                    except:
+                        pass
 
-                elif board[row][col] == 'p' + str(other_player):
-                    if streak != other_player:
-                        piece_count = 0
-                    piece_count += 1
-                    if piece_count == 3:
-                        score -= 100
-                    elif piece_count == 2:
-                        score -= 20
-                    elif piece_count == 1:
-                        score -= 1
+                    try:
+                            if board[col][row] == board[col][row + 1] == board[col][row + 2] == board[col][row + 3] == 'p' + str(other_player):
+                                score -= 10000
+                    except:
+                        pass
+                    try:
+                            if board[col][row] == board[col][row + 1] == board[col][row + 2] == board[col][row + 4] == 'p' + str(other_player):
+                                score -= 10000
+                    except:
+                        pass
         return score
 
-    def is_winning(self, board): #don't ask me df is going on here.
-        if GameBoard.check_winner(board) and self._turn:
+    def winning_move(self, board, current_player):
+        for col in range(0, len(board)):
+            for row in range(0, len(board[col])):
+                try:
+                    if board[col][row] == board[col][row + 1] == board[col][row + 2] == board[col][
+                        row + 3] == 'p' + str(current_player):
+                        return True
+                except IndexError:
+                    pass
+
+    def is_winning(self, board, current_player):
+        if self.winning_move(board, current_player):
             return True
-        return False
-
+        if self.winning_move(GameBoard.transpose(board), current_player):
+            return True
+        if self.winning_move(GameBoard.diagonals(board), current_player):
+            return True
+        if self.winning_move(GameBoard.anti_diagonals(board), current_player):
+            return True
+    # def is_winning(self, board):  # don't ask me df is going on here.
+    #     if GameBoard.check_winner(board):
+    #         return True
+    #     return False
 
 
 """
@@ -212,6 +281,3 @@ class AI(Player):
                 bestScore = min(score, bestScore)
             return bestScore
 """
-
-
-
