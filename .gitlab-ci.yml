@@ -10,6 +10,7 @@ cache:
     - .cache/pip
     - venv/
 
+#build a docker image and push it to a test image in docker-hub
 docker-build:
   # Use the official docker image.
   image: docker:latest
@@ -38,11 +39,11 @@ test:
     - source venv/bin/activate
     - pip install -r requirements.txt
   services:
-    - selenium/standalone-chrome
+    - selenium/standalone-chrome #selenium driver that can be accessed through http://172.17.0.2:4444/wd/hub
     - name: saed123/connect-four-test
       alias: connect-four
   variables:
     ENV: "$ENV"
   script:
-    - export IP=`ping -c 1 connect-four`
-    - python3 -m behave features
+    - export IP=`ping -c 1 connect-four` #export first ping output from service 'connect-four' and extract IP-Address using python
+    - python3 -m behave features #run E2E tests in CI container

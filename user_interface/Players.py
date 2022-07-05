@@ -231,10 +231,6 @@ class AI(Player):
             return True
         if self.winning_move(GameBoard.anti_diagonals(board), current_player):
             return True
-    # def is_winning(self, board):  # don't ask me df is going on here.
-    #     if GameBoard.check_winner(board):
-    #         return True
-    #     return False
 
 
 """

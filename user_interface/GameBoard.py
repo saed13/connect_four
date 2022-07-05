@@ -30,9 +30,9 @@ class GameBoard:
     @staticmethod
     def define_board(array):
         """
-
-        :param array:
-        :return:
+        define a board with empty strings, 7 columns and 6 rows
+        :param array: matrix containing 7 empty arrays
+        :return: board matrix
         """
         for e in array:
             for i in range(0, 6):
@@ -41,8 +41,7 @@ class GameBoard:
 
     def to_str(self):
         """
-
-        :return:
+        :return: current board as string
         """
         transposed = transpose(self.board)
 
@@ -54,78 +53,11 @@ class GameBoard:
 
         return current_board
 
-    def start_game(self):
-        """
-
-        :return:
-        """
-        noWinner = True
-        stop = False
-
-    def get_input(self, pos):
-        """
-        :param: pos
-        :return:
-        """
-        try:
-            self.p = 1 if self.p1 else 2
-            if pos == "stop":
-                exit()
-
-            column = int(pos / 100 - 0.05)
-            column = int(self.check(column))
-            if column == -1:
-                return -1
-
-            return column
-        except EOFError as e:
-            exit()
-
-    def check(self, column):
-        """
-
-        :param column:
-        :return:
-        """
-        try:
-            while True:
-                if column in range(0, 7):
-                    if " " not in self.board[int(column)]:
-                        return -1
-                    return column
-                else:
-                    return -1
-
-        except EOFError as e:
-            exit()
-
-    def AI_move(self):
-        current_player = self.player1 if self.p1 else self.player2
-
-        column = current_player.get_AIMove(self.board)
-
-        if column == -1:
-            return "full"
-
-        return self.add_token(column)
-
-    def add_player(self, human, name):
-        current_player = 1 if self.player1 is not None else 2
-
-        player = Human(name, current_player) if human else AI(current_player)
-
-        if current_player == 1:
-            self.player1 = player
-        else:
-            self.player2 = player
-
-        return player
-
     def add_token(self, col):
         """
-
-        :param col:
-        :return:
+        gets column number, check if there is a winner using winning algorithm and in which row the token should be placed
+        :param col: column number
+        :return: if winner exists, (col, row), next player, winner, updated class object
         """
         row = self.board[col].index(' ')
 
@@ -149,8 +81,9 @@ class GameBoard:
 # help methods
 def check_winner(board):
     """
-
-    :return:
+    check if there is a winner in the 4 possible lines
+    :param board: current board
+    :return: if there is a winner, True and which player(1 or 2). otherwise False.
     """
     horizontal = check_shape(transpose(board))
     if horizontal is not None:
@@ -173,9 +106,9 @@ def check_winner(board):
 
 def check_shape(array):
     """
-
-    :param array
-    :return:
+    check for 4 connected tokens in one array in the matrix
+    :param array: transposed matrix.
+    :return: the winner if exists
     """
     current_winner = ""
     four_connected = 1
@@ -209,9 +142,9 @@ def check_shape(array):
 
 def transpose(matrix):
     """
-
+    transpose matrix to check horizontal lines
     :param matrix:
-    :return:
+    :return: transposed matrix
     """
     rows = len(matrix)
     columns = len(matrix[0])
@@ -228,6 +161,8 @@ def transpose(matrix):
 
 def diagonals(matrix):
     """
+    :param matrix:
+    :return: diagonal lines in single arrays
     """
     h, w = len(matrix), len(matrix[0])
     return [[matrix[h - p + q - 1][q]
@@ -237,18 +172,11 @@ def diagonals(matrix):
 
 def anti_diagonals(matrix):
     """
+    :param matrix:
+    :return: anti-diagonal lines in single arrays
     """
     h, w = len(matrix), len(matrix[0])
     return [[matrix[p - q][q]
              for q in range(max(p - h + 1, 0), min(p + 1, w))]
             for p in range(h + w - 1)]
 
-
-def clear():
-    # for windows
-    if name == 'nt':
-        _ = system('cls')
-
-    # for mac and linux
-    else:
-        _ = system('clear')

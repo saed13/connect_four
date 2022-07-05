@@ -14,7 +14,7 @@ let finished = false,
 newGameBtn.addEventListener('click', newGame);
 joinGameBtn.addEventListener('click', getSavedGames);
 
-
+//show a modal of the winner
 function messageWindow(winner) {
 
     let modal = document.createElement("div");
@@ -53,10 +53,12 @@ function messageWindow(winner) {
 
 }
 
+//get current board, used in E2E
 function getCurrentBoard() {
     return currentBoard;
 }
 
+//define the join game three buttons
 function joinGame(s1, s2, s3) {
 
     newGameBtn.hidden = true;
@@ -91,6 +93,7 @@ function joinGame(s1, s2, s3) {
     }
 }
 
+//define new game buttons, player vs player, player vs AI, AI vs AI
 function newGame() {
 
     newGameBtn.hidden = true;
@@ -127,6 +130,7 @@ function newGame() {
 
 }
 
+//send chosen mode to backend
 function chooseMode(gameMode) {
     const body = {
         mode: gameMode,
@@ -196,6 +200,7 @@ function createBoard() {
     }
 }
 
+//fetch certain saved game from backend
 function getSavedGame(s) {
     fetch('/savegame', {
         method: 'POST',
@@ -213,6 +218,7 @@ function getSavedGame(s) {
         })
 }
 
+//fetch last 3 unfinished games
 function getSavedGames() {
     fetch('/saves', {
         method: 'POST',
@@ -230,6 +236,7 @@ function getSavedGames() {
 
 }
 
+//prints saved game on board
 function printSavedGame(board) {
     startMenu.parentNode.removeChild(startMenu);
 

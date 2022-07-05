@@ -14,9 +14,11 @@ directoryName = os.path.dirname('sessions.db')
 pathToSessionsDir = os.path.abspath(directoryName)
 
 
+#landing page
 @app.route('/')
 def start_app():
     file = shelve.open(f"{pathToSessionsDir}/sessions")
+    #check if sessions.db exists, otherwise set sessions key to 0
     try:
         sessions = file['sessions']
         file.close()
@@ -28,6 +30,7 @@ def start_app():
     return render_template("main.html", javascript=javascript)
 
 
+#endpoínt for start a new game
 @app.route('/start_game', methods=['POST'])
 def start_game():
     file = shelve.open(f"{pathToSessionsDir}/sessions")
@@ -53,8 +56,12 @@ def start_game():
             file[f"session{str(session)}"] = app.config['gameBoard' + str(session)]
             file.close()
             return jsonify({"session": session, "mode": 3})
+        else:
+            file.close()
+            return None, 400
 
 
+#endpoint to get a certain saved game
 @app.route('/savegame', methods=['POST'])
 def get_savegame():
     file = shelve.open(f"{pathToSessionsDir}/sessions")
@@ -65,6 +72,7 @@ def get_savegame():
     return saves
 
 
+#endpoint to retrieve the last 3 unfinished games
 @app.route('/saves', methods=['POST'])
 def get_saves():
     file = shelve.open(f"{pathToSessionsDir}/sessions")
@@ -86,10 +94,7 @@ def get_saves():
     return saves
 
 
-def check_save(s):
-    pass
-
-
+#endpoint to get a user column num input, return in which row, col and the winner if exists
 @app.route('/post_pos', methods=['POST'])
 def get_pos():
     file = shelve.open(f"{pathToSessionsDir}/sessions")
@@ -114,5 +119,6 @@ def get_pos():
         return jsonify({'full': False, 'winner': row[0], 'pos': row[1], 'p1': row[2], 'finished': row[3]}), 200
 
 
+#start flask app
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
