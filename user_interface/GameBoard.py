@@ -53,6 +53,76 @@ class GameBoard:
 
         return current_board
 
+    def start_game(self):
+        """
+
+        :return:
+        """
+        noWinner = True
+        stop = False
+
+    def get_input(self, pos):
+        """
+        :param: pos
+        :return:
+        """
+        try:
+            self.p = 1 if self.p1 else 2
+            if pos == "stop":
+                exit()
+
+            column = int(pos / 100 - 0.05)
+            column = int(self.check(column))
+            if column == -1:
+                return -1
+
+            return column
+        except EOFError as e:
+            exit()
+
+    def check(self, column):
+        """
+        check input
+        :param column:
+        :return:
+        """
+        try:
+            while True:
+                if column in range(0, 7):
+                    if " " not in self.board[int(column)]:
+                        return -1
+                    return column
+                else:
+                    return -1
+
+        except EOFError as e:
+            exit()
+
+    def AI_move(self):
+        """
+        get AI move from players class
+        """
+        current_player = self.player1 if self.p1 else self.player2
+
+        column = current_player.get_AIMove(self.board)
+
+        if column == -1:
+            return "full"
+
+        return self.add_token(column)
+
+    def add_player(self, human, name):
+        current_player = 1 if self.player1 is not None else 2
+
+        player = Human(name, current_player) if human else AI(current_player)
+
+        if current_player == 1:
+            self.player1 = player
+        else:
+            self.player2 = player
+
+        return player
+
     def add_token(self, col):
         """
         gets column number, check if there is a winner using winning algorithm and in which row the token should be placed
