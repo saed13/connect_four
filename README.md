@@ -4,10 +4,10 @@
 
 <b>Team mitglieder:</b>
 <ul>
-    <li>Mahmoud Mohamed.</li>
+    <li>Saed Abed.</li>   
     <li>Roxana Buder.</li>
-    <li>Saed Abed.</li>
     <li>Nick Thomas.</li>
+    <li>Mahmoud Mohamed.</li>
 </ul>
 
 ## Getting started
