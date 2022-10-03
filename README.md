@@ -4,10 +4,10 @@
 
 <b>Team mitglieder:</b>
 <ul>
-    <li>Mahmoud Mohamed. Matrikelnummer: 00803685</li>
-    <li>Roxana Buder. Matrikelnummer: 00820641</li>
-    <li>Saed Abed. Matrikelnummer: 00819291</li>
-    <li>Nick Thomas. Matrikelnummer: 00813400</li>
+    <li>Mahmoud Mohamed.</li>
+    <li>Roxana Buder.</li>
+    <li>Saed Abed.</li>
+    <li>Nick Thomas.</li>
 </ul>
 
 ## Getting started
