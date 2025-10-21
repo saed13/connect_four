@@ -36,7 +36,7 @@ class AI(Player):
     def __init__(self, turn):
         super(AI, self).__init__(names.get_first_name(), turn, "AI")
         self.tree = None
-        self.depth = 3
+        self.depth = 5  # Increased depth for stronger play
 
     def next_move(self, board):
         pass
@@ -58,66 +58,149 @@ class AI(Player):
                 valid_locations.append(i)
         return valid_locations
 
+    def order_moves(self, valid_locations, board_width):
+        """Order moves to prioritize center columns for better alpha-beta pruning"""
+        center = board_width // 2
+        # Sort by distance from center (closer to center = higher priority)
+        return sorted(valid_locations, key=lambda col: abs(col - center))
+
     def get_AIMove(self, board):
+        """Use minimax with alpha-beta pruning to find the best move"""
         valid_locations = self.get_valid_locations(board)
+
+        if not valid_locations:
+            return None
+
+        # Order moves to check center columns first for better pruning
+        valid_locations = self.order_moves(valid_locations, len(board))
+
+        best_col = valid_locations[0]
         best_score = -math.inf
-        best_col = random.choice(valid_locations)
+        alpha = -math.inf
+        beta = math.inf
 
-        for location in valid_locations:
+        for col in valid_locations:
             board_copy = copy.deepcopy(board)
-            # copy from updated played board
-            board_copy[location][board_copy[location].index(' ')] = 'p' + str(self._turn)
+            board_copy = self.add_token(board_copy, col, self._turn)
 
-            score = self.evaluate_points(board_copy, self._turn)
-            # clear last move
+            # Call minimax for opponent's turn (minimizing player)
+            _, score = self.alphabeta(board_copy, self.depth - 1, alpha, beta, False)
+
             if score > best_score:
-                best_col = location
                 best_score = score
+                best_col = col
+
+            alpha = max(alpha, best_score)
 
         return best_col
 
-    def alphabeta(self, board, depth, a, b, maximizingPlayer):
+    def alphabeta(self, board, depth, alpha, beta, maximizingPlayer):
+        """Minimax algorithm with alpha-beta pruning"""
         valid_locations = self.get_valid_locations(board)
+        other_player = self.change_player(self._turn)
 
-        if depth == 0 or len(valid_locations) == 0 or self.is_winning(1) or self.is_winning(2):
-            return None, self.evaluate_points(board, self._turn)
+        # Terminal conditions
+        is_terminal = (depth == 0 or
+                      len(valid_locations) == 0 or
+                      self.is_winning(board, self._turn) or
+                      self.is_winning(board, other_player))
+
+        if is_terminal:
+            if self.is_winning(board, self._turn):
+                return None, 100000000  # AI wins
+            elif self.is_winning(board, other_player):
+                return None, -100000000  # Opponent wins
+            elif len(valid_locations) == 0:
+                return None, 0  # Draw
+            else:
+                # Depth limit reached, evaluate position
+                return None, self.evaluate_points(board, self._turn)
+
+        # Order moves for better pruning
+        valid_locations = self.order_moves(valid_locations, len(board))
 
         if maximizingPlayer:
-            column = random.choice(valid_locations)
             best_score = -math.inf
+            best_col = valid_locations[0]
+
             for col in valid_locations:
-                current_board = self.add_token(board, col, self._turn)
-                score = self.alphabeta(current_board, depth - 1, a, b, False)
-                best_score = max(best_score, score)
-                column = col
-                a = max(a, best_score)
-                if a >= b:
-                    break
-            return column, best_score
+                board_copy = copy.deepcopy(board)
+                board_copy = self.add_token(board_copy, col, self._turn)
+                _, score = self.alphabeta(board_copy, depth - 1, alpha, beta, False)
+
+                if score > best_score:
+                    best_score = score
+                    best_col = col
+
+                alpha = max(alpha, best_score)
+                if alpha >= beta:
+                    break  # Beta cutoff
+
+            return best_col, best_score
         else:
-            column = random.choice(valid_locations)
             best_score = math.inf
+            best_col = valid_locations[0]
+
             for col in valid_locations:
-                current_player = self.change_player(self._turn)
-                current_board = self.add_token(board, col, current_player)
-                score = self.alphabeta(current_board, depth - 1, a, b, True)
-                best_score = min(best_score, score)
-                column = col
-                b = min(b, best_score)
-                if b <= a:
-                    break
-        return column, best_score
+                board_copy = copy.deepcopy(board)
+                board_copy = self.add_token(board_copy, col, other_player)
+                _, score = self.alphabeta(board_copy, depth - 1, alpha, beta, True)
+
+                if score < best_score:
+                    best_score = score
+                    best_col = col
+
+                beta = min(beta, best_score)
+                if beta <= alpha:
+                    break  # Alpha cutoff
+
+            return best_col, best_score
 
     def evaluate_points(self, board, current_player):
+        """Enhanced evaluation function with positional bonuses"""
         score = 0
-        # vertical
+
+        # Evaluate all four directions
         score += self.count_points(board)
-        # horizontal
         score += self.count_points(GameBoard.transpose(board))
-        # diag
         score += self.count_points(GameBoard.diagonals(board))
-        # anti_diag
         score += self.count_points(GameBoard.anti_diagonals(board))
+
+        # Add center column preference bonus
+        score += self.evaluate_center_control(board)
+
+        return score
+
+    def evaluate_center_control(self, board):
+        """Reward controlling center columns (more strategic positions)"""
+        score = 0
+        center_col = len(board) // 2
+        other_player = self.change_player(self._turn)
+
+        # Check center column
+        center_count_ai = 0
+        center_count_opp = 0
+
+        if center_col < len(board):
+            for row in range(len(board[center_col])):
+                if board[center_col][row] == 'p' + str(self._turn):
+                    center_count_ai += 1
+                elif board[center_col][row] == 'p' + str(other_player):
+                    center_count_opp += 1
+
+        # Give bonus for center control
+        score += center_count_ai * 3
+        score -= center_count_opp * 3
+
+        # Check adjacent center columns
+        for offset in [-1, 1]:
+            col = center_col + offset
+            if 0 <= col < len(board):
+                for row in range(len(board[col])):
+                    if board[col][row] == 'p' + str(self._turn):
+                        score += 2
+                    elif board[col][row] == 'p' + str(other_player):
+                        score -= 2
 
         return score
 
